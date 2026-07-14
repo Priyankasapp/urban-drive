@@ -1,48 +1,58 @@
 import mongoose from "mongoose";
+import { seedSuperAdmin } from "./seeder";
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
+const MONGODB_URI = process.env.MONGODB_URI || "";
 
 if (!MONGODB_URI) {
   throw new Error(
-    "Please define the MONGODB_URI environment variable in .env.local",
+    "Please define the MONGODB_URI environment variable inside your local .env configuration.",
   );
 }
 
-// Extend the NodeJS global type to cache the connection across hot reloads
-interface MongooseCache {
+// Intercept hot-reloads in development environment
+interface GlobalMongoose {
   conn: typeof mongoose | null;
   promise: Promise<typeof mongoose> | null;
 }
 
 declare global {
-  var mongooseCache: MongooseCache | undefined;
+  var mongooseCache: GlobalMongoose | undefined;
 }
 
-let cached = global.mongooseCache;
+let cached = globalThis.mongooseCache;
 
 if (!cached) {
-  cached = global.mongooseCache = { conn: null, promise: null };
+  cached = globalThis.mongooseCache = { conn: null, promise: null };
 }
 
-export async function connectDB(): Promise<typeof mongoose> {
-  if (cached!.conn) {
-    return cached!.conn;
+export async function connectDB() {
+  if (cached?.conn) {
+    return cached.conn;
   }
 
-  if (!cached!.promise) {
-    cached!.promise = mongoose.connect(MONGODB_URI, {
+  if (!cached?.promise) {
+    const opts = {
       bufferCommands: false,
-    });
+    };
+
+    cached!.promise = mongoose
+      .connect(MONGODB_URI, opts)
+      .then(async (instance) => {
+        console.log("🚀 MongoDB Connected Successfully");
+
+        // Auto-run your seeder upon clean connection
+        await seedSuperAdmin();
+
+        return instance;
+      });
   }
 
   try {
     cached!.conn = await cached!.promise;
-  } catch (err) {
+  } catch (e) {
     cached!.promise = null;
-    throw err;
+    throw e;
   }
 
   return cached!.conn;
 }
-
-export default connectDB;
