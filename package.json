@@ -14,9 +14,11 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
+    "@tanstack/react-router": "^1.170.18",
     "bcryptjs": "^3.0.3",
     "gsap": "^3.15.0",
     "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^1.24.0",
     "mongoose": "^9.7.4",
     "next": "16.2.10",
     "react": "19.2.4",

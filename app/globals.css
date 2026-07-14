@@ -1,1 +1,103 @@
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Surface Colors */
+    --surface: #f8f8f8;
+    --surface-dim: #dadada;
+    --surface-bright: #f9f9f9;
+    --surface-container-lowest: #ffffff;
+    --surface-container-low: #f3f3f3;
+    --surface-container: #eeeeee;
+    --surface-container-high: #e8e8e8;
+    --surface-container-highest: #e2e2e2;
+    --on-surface: #1b1b1b;
+    --on-surface-variant: #4c4546;
+    --inverse-surface: #303030;
+    --inverse-on-surface: #f1f1f1;
+    --outline: #7e7576;
+    --outline-variant: #cfc4c5;
+    --surface-tint: #5e5e5e;
+
+    /* Core Palette */
+    --primary: #000000;
+    --on-primary: #ffffff;
+    --primary-container: #1b1b1b;
+    --on-primary-container: #848484;
+    --inverse-primary: #c6c6c6;
+
+    --secondary: #5d5f5f;
+    --on-secondary: #ffffff;
+    --secondary-container: #dfe0e0;
+    --on-secondary-container: #616363;
+
+    --tertiary: #000000;
+    --on-tertiary: #ffffff;
+    --tertiary-container: #1b1b1b;
+    --on-tertiary-container: #848484;
+
+    /* Status Colors */
+    --error: #ba1a1a;
+    --on-error: #ffffff;
+    --error-container: #ffdad6;
+    --on-error-container: #93000a;
+    --accent-success: #22c55e;
+
+    /* Fixed Tonal Specs */
+    --primary-fixed: #e2e2e2;
+    --primary-fixed-dim: #c6c6c6;
+    --on-primary-fixed: #1b1b1b;
+    --on-primary-fixed-variant: #474747;
+
+    --secondary-fixed: #e2e2e2;
+    --secondary-fixed-dim: #c6c6c7;
+    --on-secondary-fixed: #1a1c1c;
+    --on-secondary-fixed-variant: #454747;
+
+    --tertiary-fixed: #e2e2e2;
+    --tertiary-fixed-dim: #c6c6c6;
+    --on-tertiary-fixed: #1b1b1b;
+    --on-tertiary-fixed-variant: #474747;
+
+    /* Layout & Base Styling */
+    --background: #ffffff; /* Base white tier background */
+    --on-background: #1b1b1b;
+    --surface-variant: #e2e2e2;
+    --border: #e5e5e5;
+
+    /* Typography Overrides */
+    --text-primary: #111111;
+    --text-secondary: #666666;
+
+    /* Shadows & Blurs */
+    --executive-shadow: 0px 10px 40px rgba(0, 0, 0, 0.04);
+    --glass-fill: rgba(255, 255, 255, 0.7);
+  }
+}
+
+/* Base Body Application */
+body {
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: "Inter", sans-serif;
+}
+
+/* Quick Premium Utility Styles based on the PRD Guidelines */
+.glassmorphism {
+  background: var(--glass-fill);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+}
+
+.executive-card {
+  background-color: var(--surface-container-lowest);
+  border: 1px solid var(--border);
+  box-shadow: var(--executive-shadow);
+  border-radius: 1rem; /* 16px lg roundedness */
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.executive-card:hover {
+  transform: translateY(-2px);
+}
