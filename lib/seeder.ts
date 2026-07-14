@@ -8,11 +8,11 @@ export async function seedSuperAdmin() {
     });
 
     if (existingSuperAdmin) {
-      console.log("🛡️ Super Admin already exists.");
+      console.log("Super Admin already exists.");
       return;
     }
 
-    const superAdminName = process.env.SUPER_ADMIN_NAME ?? "Super Admin";
+    // const superAdminName = process.env.SUPER_ADMIN_NAME ?? "Super Admin";
     const superAdminEmail =
       process.env.SUPER_ADMIN_EMAIL ?? "superadmin@example.com";
     const superAdminPassword =
@@ -21,7 +21,7 @@ export async function seedSuperAdmin() {
     const hashedPassword = await bcrypt.hash(superAdminPassword, 10);
 
     await User.create({
-      name: superAdminName,
+      // name: superAdminName,
       email: superAdminEmail,
       password: hashedPassword,
       role: "super_admin",

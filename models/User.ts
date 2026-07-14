@@ -1,24 +1,30 @@
-import mongoose, { Schema, Document, Model, Types } from "mongoose";
+import mongoose, { Document, Model, Schema, Types } from "mongoose";
 
 export interface IUser extends Document {
   name: string;
   email: string;
+  phone: string;
   password: string;
 
-  role: "super_admin" | "college_admin" | "teacher" | "student";
+  avatar?: string;
 
-  collegeId?: Types.ObjectId;
-
-  permissions: string[];
-
-  enrollmentNo?: string;
-  department?: string;
-  semester?: number;
+  role: Types.ObjectId;
 
   isActive: boolean;
+  isEmailVerified: boolean;
+  twoFactorEnabled: boolean;
+
+  lastLogin?: Date;
+
+  loginAttempts: number;
+  lockUntil?: Date;
+
+  createdBy?: Types.ObjectId;
+  updatedBy?: Types.ObjectId;
 
   createdAt: Date;
   updatedAt: Date;
+  permissions: string[];
 }
 
 const UserSchema = new Schema<IUser>(
@@ -37,52 +43,82 @@ const UserSchema = new Schema<IUser>(
       trim: true,
     },
 
+    phone: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
     password: {
       type: String,
       required: true,
+      select: false,
+    },
+
+    avatar: {
+      type: String,
+      default: "",
     },
 
     role: {
-      type: String,
-      enum: ["super_admin", "college_admin", "teacher", "student"],
-      required: true,
-    },
-
-    collegeId: {
       type: Schema.Types.ObjectId,
-      ref: "College",
-      default: null,
-    },
-
-    permissions: {
-      type: [String],
-      default: [],
-    },
-
-    enrollmentNo: {
-      type: String,
-      default: "",
-    },
-
-    department: {
-      type: String,
-      default: "",
-    },
-
-    semester: {
-      type: Number,
-      default: 1,
+      ref: "Role",
+      required: true,
     },
 
     isActive: {
       type: Boolean,
       default: true,
     },
+
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    twoFactorEnabled: {
+      type: Boolean,
+      default: true,
+    },
+
+    lastLogin: {
+      type: Date,
+      default: null,
+    },
+
+    loginAttempts: {
+      type: Number,
+      default: 0,
+    },
+
+    lockUntil: {
+      type: Date,
+      default: null,
+    },
+    permissions: {
+      type: [String],
+      default: [],
+    },
+
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
+
+    updatedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
   },
   {
     timestamps: true,
   },
 );
+
+UserSchema.index({ email: 1 });
+UserSchema.index({ role: 1 });
 
 const User: Model<IUser> =
   mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
