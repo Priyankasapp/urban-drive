@@ -7,12 +7,15 @@ export interface ICar {
   category: Types.ObjectId;
   location: Types.ObjectId;
   pricePerDay: number;
-  transmission: "manual" | "automatic";
-  fuelType: "petrol" | "diesel" | "electric" | "hybrid";
+  transmission: "Automatic" | "Manual";
+  fuelType:
+    "Electric (BEV)" | "Premium Gasoline" | "petrol" | "diesel" | "hybrid";
   seats: number;
+  horsepower: number;
+  acceleration: string;
   images: string[];
   description: string;
-  status: "available" | "booked" | "maintenance";
+  status: "available" | "booked" | "maintenance" | "reserved" | "new";
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -32,33 +35,55 @@ const CarSchema = new Schema<ICar>(
     },
     transmission: {
       type: String,
-      enum: ["manual", "automatic"],
+      enum: ["Automatic", "Manual"], // Match capitalization from AddCarModal form
       required: true,
     },
     fuelType: {
       type: String,
-      enum: ["petrol", "diesel", "electric", "hybrid"],
+      enum: [
+        "Electric (BEV)",
+        "Premium Gasoline",
+        "petrol",
+        "diesel",
+        "hybrid",
+      ], // Accommodates both standards
       required: true,
     },
-    seats: { type: Number, required: true, min: 1 },
+    seats: {
+      type: Number,
+      required: true,
+      min: [1, "Seats must be at least 1"],
+    },
+    horsepower: {
+      type: Number,
+      required: true,
+      min: [1, "Horsepower must be greater than 0"],
+    },
+    acceleration: {
+      type: String,
+      required: true, // e.g., "2.6s" or "4.4s"
+      trim: true,
+    },
     images: {
       type: [String],
       required: true,
       validate: {
         validator: (arr: string[]) => arr.length > 0,
-        message: "At least one image is required",
+        message: "At least one vehicle image is required",
       },
     },
     description: { type: String, required: true },
     status: {
       type: String,
-      enum: ["available", "booked", "maintenance"],
+      enum: ["available", "booked", "maintenance", "reserved", "new"],
       default: "available",
     },
     isDeleted: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
+
+// Pre-save validation or automatic slug generation can be placed here if necessary
 
 const Car = models.Car || model<ICar>("Car", CarSchema);
 export default Car;

@@ -7,7 +7,6 @@ import {
   OfficeLocation,
 } from "@/types/ contact";
 import { Phone, Mail, MapPin, Clock } from "lucide-react";
-
 export const contactHero: ContactHero = {
   badge: "Luxury Concierge",
 
@@ -16,7 +15,7 @@ export const contactHero: ContactHero = {
   description:
     "Whether you're reserving a weekend supercar or arranging executive transportation, our concierge team is ready to assist.",
 
-  image: "/images/contact/hero.jpg",
+  image: "/assets/car1.jpeg",
 
   primaryButton: "Book a Vehicle",
 

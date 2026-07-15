@@ -9,22 +9,36 @@ interface AddCarModalProps {
 }
 
 export default function AddCarModal({ isOpen, onClose }: AddCarModalProps) {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  // 1. Change state to an array of strings to hold multiple images
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   if (!isOpen) return null;
 
+  // 2. Process multiple file selections seamlessly
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+    const files = e.target.files;
+    if (files) {
+      const fileArray = Array.from(files);
+
+      fileArray.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          if (reader.result) {
+            // Append the new image to the existing preview array
+            setImagePreviews((prev) => [...prev, reader.result as string]);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
     }
   };
 
-  const removeImage = () => setImagePreview(null);
+  // 3. Remove a single specific image by its index
+  const removeImage = (indexToRemove: number) => {
+    setImagePreviews((prev) =>
+      prev.filter((_, index) => index !== indexToRemove),
+    );
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -57,53 +71,71 @@ export default function AddCarModal({ isOpen, onClose }: AddCarModalProps) {
         {/* Form Element */}
         <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
           {/* Media Upload Box */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             <label className="text-xs font-semibold tracking-wider text-canvas/60 uppercase block">
-              Vehicle Imagery
+              Vehicle Imagery ({imagePreviews.length} selected)
             </label>
-            <div className="relative border border-dashed border-canvas/20 rounded-xl bg-canvas/[0.02] hover:bg-canvas/[0.04] transition-colors duration-200">
-              {!imagePreview ? (
-                <label
-                  htmlFor="modal-image-upload"
-                  className="flex flex-col items-center justify-center p-6 cursor-pointer gap-2"
-                >
-                  <div className="p-2.5 bg-canvas/10 rounded-full border border-canvas/10 text-canvas">
-                    <Upload size={18} />
-                  </div>
-                  <div className="text-center">
-                    <span className="text-xs font-medium block">
-                      Click to upload vehicle photo
-                    </span>
-                    <span className="text-[10px] text-canvas/40 block mt-0.5">
-                      High res PNG or JPG
-                    </span>
-                  </div>
-                  <input
-                    id="modal-image-upload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={handleImageChange}
-                  />
-                </label>
-              ) : (
-                <div className="relative w-full h-48 rounded-xl overflow-hidden p-1 bg-black/20">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={imagePreview}
-                    alt="Vehicle Preview"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute top-3 right-3 p-1.5 bg-black/60 hover:bg-black/80 text-white rounded-full backdrop-blur-sm transition-colors"
-                  >
-                    <X size={14} />
-                  </button>
+
+            {/* Main Upload Dropzone area */}
+            <div className="border border-dashed border-canvas/20 rounded-xl bg-canvas/[0.02] hover:bg-canvas/[0.04] transition-colors duration-200">
+              <label
+                htmlFor="modal-image-upload"
+                className="flex flex-col items-center justify-center p-6 cursor-pointer gap-2"
+              >
+                <div className="p-2.5 bg-canvas/10 rounded-full border border-canvas/10 text-canvas">
+                  <Upload size={18} />
                 </div>
-              )}
+                <div className="text-center">
+                  <span className="text-xs font-medium block">
+                    Click to upload vehicle photos
+                  </span>
+                  <span className="text-[10px] text-canvas/40 block mt-0.5">
+                    Select one or multiple high res PNG or JPG files
+                  </span>
+                </div>
+                <input
+                  id="modal-image-upload"
+                  type="file"
+                  accept="image/*"
+                  multiple // <-- Critical attribute added here to allow multi-select
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </label>
             </div>
+
+            {/* Dynamic Multi-Image Gallery Grid Layout */}
+            {imagePreviews.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 p-2 rounded-xl bg-black/20 border border-canvas/5">
+                {imagePreviews.map((preview, index) => (
+                  <div
+                    key={index}
+                    className="relative aspect-video rounded-lg overflow-hidden border border-canvas/10 bg-black/40 group"
+                  >
+                    <img
+                      src={preview}
+                      alt={`Vehicle Preview ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors shadow-lg"
+                        title="Remove Image"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                    {index === 0 && (
+                      <span className="absolute bottom-1.5 left-1.5 bg-canvas text-ink text-[9px] font-bold px-1.5 py-0.5 rounded tracking-wider uppercase">
+                        Cover
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Core Info Grid */}

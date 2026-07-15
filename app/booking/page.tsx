@@ -4,7 +4,17 @@ import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Calendar, User, Mail, Phone, FileText, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft } from "lucide-react";
+import {
+  Calendar,
+  User,
+  Mail,
+  Phone,
+  FileText,
+  ArrowRight,
+  ShieldCheck,
+  CheckCircle2,
+  ChevronLeft,
+} from "lucide-react";
 
 interface Car {
   _id: string;
@@ -31,8 +41,16 @@ function BookingFormContent() {
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [licenseNumber, setLicenseNumber] = useState("");
-  const [pickupDate, setPickupDate] = useState("");
-  const [returnDate, setReturnDate] = useState("");
+  const dateParam = searchParams.get("date") ?? "";
+  const initialReturnDate = dateParam
+    ? (() => {
+        const nextDay = new Date(dateParam);
+        nextDay.setDate(nextDay.getDate() + 2);
+        return nextDay.toISOString().split("T")[0];
+      })()
+    : "";
+  const [pickupDate, setPickupDate] = useState(dateParam);
+  const [returnDate, setReturnDate] = useState(initialReturnDate);
 
   // Booking Feedback State
   const [submitting, setSubmitting] = useState(false);
@@ -150,28 +168,45 @@ function BookingFormContent() {
         <div className="w-20 h-20 bg-success/10 text-success rounded-full flex items-center justify-center mx-auto mb-8 border border-success/20">
           <CheckCircle2 size={40} className="stroke-[1.5]" />
         </div>
-        <h1 className="text-3xl font-normal tracking-tight mb-2">Reservation Confirmed</h1>
+        <h1 className="text-3xl font-normal tracking-tight mb-2">
+          Reservation Confirmed
+        </h1>
         <p className="text-sm text-[var(--text-secondary)] max-w-md mx-auto mb-8">
-          Thank you for choosing UrbanDrive. Your reservation is pending verification. Our concierge team will contact you shortly.
+          Thank you for choosing UrbanDrive. Your reservation is pending
+          verification. Our concierge team will contact you shortly.
         </p>
 
         {/* Booking Details Glass Summary */}
         <div className="bg-ink/[0.02] border border-line rounded-2xl p-6 text-left mb-8 space-y-4 max-w-md mx-auto backdrop-blur-md">
           <div className="flex justify-between border-b border-line pb-3">
-            <span className="text-xs text-[var(--text-secondary)] uppercase font-semibold">Reference</span>
-            <span className="text-sm font-semibold tracking-wider">{successBooking.bookingRef}</span>
+            <span className="text-xs text-[var(--text-secondary)] uppercase font-semibold">
+              Reference
+            </span>
+            <span className="text-sm font-semibold tracking-wider">
+              {successBooking.bookingRef}
+            </span>
           </div>
           <div className="flex justify-between border-b border-line pb-3">
-            <span className="text-xs text-[var(--text-secondary)] uppercase font-semibold">Vehicle</span>
-            <span className="text-sm font-semibold">{successBooking.carSnapshot?.name}</span>
+            <span className="text-xs text-[var(--text-secondary)] uppercase font-semibold">
+              Vehicle
+            </span>
+            <span className="text-sm font-semibold">
+              {successBooking.carSnapshot?.name}
+            </span>
           </div>
           <div className="flex justify-between border-b border-line pb-3">
-            <span className="text-xs text-[var(--text-secondary)] uppercase font-semibold">Duration</span>
+            <span className="text-xs text-[var(--text-secondary)] uppercase font-semibold">
+              Duration
+            </span>
             <span className="text-sm">{days} Days</span>
           </div>
           <div className="flex justify-between pt-1">
-            <span className="text-xs text-[var(--text-secondary)] uppercase font-semibold">Amount Paid</span>
-            <span className="text-base font-bold text-[var(--text-primary)]">${successBooking.totalPrice}</span>
+            <span className="text-xs text-[var(--text-secondary)] uppercase font-semibold">
+              Amount Paid
+            </span>
+            <span className="text-base font-bold text-[var(--text-primary)]">
+              ${successBooking.totalPrice}
+            </span>
           </div>
         </div>
 
@@ -187,7 +222,10 @@ function BookingFormContent() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-12">
-      <Link href="/" className="inline-flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-8 transition-colors">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] mb-8 transition-colors"
+      >
         <ChevronLeft size={16} /> Back to Homepage
       </Link>
 
@@ -195,8 +233,12 @@ function BookingFormContent() {
         {/* Left Side: Booking Form */}
         <div className="lg:col-span-7 space-y-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-normal tracking-tight mb-2">Book Your Fleet Asset</h1>
-            <p className="text-sm text-[var(--text-secondary)]">Complete the verification credentials to deploy your supercar.</p>
+            <h1 className="text-3xl md:text-4xl font-normal tracking-tight mb-2">
+              Book Your Fleet Asset
+            </h1>
+            <p className="text-sm text-[var(--text-secondary)]">
+              Complete the verification credentials to deploy your supercar.
+            </p>
           </div>
 
           <form onSubmit={handleBookingSubmit} className="space-y-6">
@@ -217,7 +259,11 @@ function BookingFormContent() {
                   className="w-full bg-transparent border-b border-[var(--border)] py-3 text-sm focus:border-[var(--primary)] outline-none transition-colors"
                 >
                   {cars.map((car) => (
-                    <option key={car._id} value={car._id} className="text-black">
+                    <option
+                      key={car._id}
+                      value={car._id}
+                      className="text-black"
+                    >
                       {car.name} — ${car.pricePerDay}/day
                     </option>
                   ))}
@@ -318,7 +364,7 @@ function BookingFormContent() {
                       peer-focus:top-[-10px] peer-focus:text-xs peer-focus:text-[var(--primary)]
                       peer-[:not(:placeholder-shown)]:top-[-10px] peer-[:not(:placeholder-shown)]:text-xs"
                   >
-                    Driver's License ID
+                    Drivers License ID
                   </label>
                 </div>
               </div>
@@ -332,7 +378,12 @@ function BookingFormContent() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="pickup" className="text-xs text-[var(--text-secondary)] font-medium">Pickup Date</label>
+                  <label
+                    htmlFor="pickup"
+                    className="text-xs text-[var(--text-secondary)] font-medium"
+                  >
+                    Pickup Date
+                  </label>
                   <div className="relative">
                     <input
                       type="date"
@@ -346,7 +397,12 @@ function BookingFormContent() {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <label htmlFor="return" className="text-xs text-[var(--text-secondary)] font-medium">Return Date</label>
+                  <label
+                    htmlFor="return"
+                    className="text-xs text-[var(--text-secondary)] font-medium"
+                  >
+                    Return Date
+                  </label>
                   <div className="relative">
                     <input
                       type="date"
@@ -400,7 +456,9 @@ function BookingFormContent() {
                     />
                   </div>
                   <div>
-                    <h4 className="text-lg font-semibold">{selectedCar.name}</h4>
+                    <h4 className="text-lg font-semibold">
+                      {selectedCar.name}
+                    </h4>
                     <span className="inline-block px-3 py-0.5 rounded-full bg-ink/[0.04] text-[10px] font-bold uppercase tracking-wider text-[var(--text-secondary)] mt-1.5">
                       {selectedCar.category?.name || "Premium Fleet"}
                     </span>
@@ -410,34 +468,54 @@ function BookingFormContent() {
                 {/* Logistics */}
                 <div className="grid grid-cols-2 gap-4 text-xs border-t border-b border-line py-4">
                   <div>
-                    <span className="text-[var(--text-secondary)] block">Transmission</span>
-                    <span className="font-semibold capitalize mt-0.5 block">{selectedCar.transmission}</span>
+                    <span className="text-[var(--text-secondary)] block">
+                      Transmission
+                    </span>
+                    <span className="font-semibold capitalize mt-0.5 block">
+                      {selectedCar.transmission}
+                    </span>
                   </div>
                   <div>
-                    <span className="text-[var(--text-secondary)] block">Fuel Station</span>
-                    <span className="font-semibold capitalize mt-0.5 block">{selectedCar.fuelType}</span>
+                    <span className="text-[var(--text-secondary)] block">
+                      Fuel Station
+                    </span>
+                    <span className="font-semibold capitalize mt-0.5 block">
+                      {selectedCar.fuelType}
+                    </span>
                   </div>
                 </div>
 
                 {/* Price Breakdown */}
                 <div className="space-y-3">
                   <div className="flex justify-between text-xs">
-                    <span className="text-[var(--text-secondary)]">${selectedCar.pricePerDay} × {days} days</span>
+                    <span className="text-[var(--text-secondary)]">
+                      ${selectedCar.pricePerDay} × {days} days
+                    </span>
                     <span>${totalPrice}</span>
                   </div>
                   <div className="flex justify-between text-xs">
-                    <span className="text-[var(--text-secondary)]">Concierge Fee</span>
+                    <span className="text-[var(--text-secondary)]">
+                      Concierge Fee
+                    </span>
                     <span className="text-success font-medium">Included</span>
                   </div>
                   <div className="flex justify-between border-t border-line pt-3 font-semibold">
-                    <span className="text-sm text-[var(--text-primary)]">Total Price</span>
+                    <span className="text-sm text-[var(--text-primary)]">
+                      Total Price
+                    </span>
                     <span className="text-lg">${totalPrice}</span>
                   </div>
                 </div>
 
                 <div className="flex gap-2 text-[10px] text-[var(--text-secondary)] bg-ink/[0.02] border border-line p-3.5 rounded-xl">
-                  <ShieldCheck size={16} className="text-[var(--outline)] flex-shrink-0" />
-                  <span>Rental includes premium coverage protection & roadside backup concierge.</span>
+                  <ShieldCheck
+                    size={16}
+                    className="text-[var(--outline)] flex-shrink-0"
+                  />
+                  <span>
+                    Rental includes premium coverage protection & roadside
+                    backup concierge.
+                  </span>
                 </div>
               </div>
             ) : (
@@ -455,11 +533,13 @@ function BookingFormContent() {
 export default function BookingPage() {
   return (
     <main className="min-h-screen bg-[var(--background)] text-[var(--text-primary)] pt-24">
-      <Suspense fallback={
-        <div className="max-w-7xl mx-auto px-6 py-12 text-center text-sm text-[var(--text-secondary)]">
-          Loading reservation config...
-        </div>
-      }>
+      <Suspense
+        fallback={
+          <div className="max-w-7xl mx-auto px-6 py-12 text-center text-sm text-[var(--text-secondary)]">
+            Loading reservation config...
+          </div>
+        }
+      >
         <BookingFormContent />
       </Suspense>
     </main>

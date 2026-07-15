@@ -97,7 +97,7 @@ export default function Collections(): React.JSX.Element {
   return (
     <section
       id="collections"
-      className="py-20 bg-[var(--background)] transition-colors duration-300"
+      className="py-20 px-10 bg-[var(--background)] transition-colors duration-300"
     >
       <div className="max-w-7xl mx-auto px-6">
         {/* Header Section */}
@@ -133,7 +133,7 @@ export default function Collections(): React.JSX.Element {
         </div>
 
         {/* Category Filter Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
+        <div className="grid grid-cols-2 px-15 md:grid-cols-4 gap-8 mb-20">
           {categories.map((category) => {
             const isActive = activeCategory === category.id;
             return (
