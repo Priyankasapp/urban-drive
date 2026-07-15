@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
-import { connectDB } from "@/lib/mongodb";
+import { connectDB } from "@/lib/db";
 import { generateToken } from "@/lib/jwt";
 import User from "@/models/User";
+import "@/models/Role"; // Ensure Role schema is registered in Mongoose
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,8 +23,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Find user
-    const user = await User.findOne({ email });
+    // Find user and populate role
+    const user = await User.findOne({ email }).populate("role");
 
     if (!user) {
       return NextResponse.json(
@@ -46,14 +47,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Only Super Admin can login for now
-    const userRole =
-      typeof user.role === "string" ? user.role : String(user.role);
-    if (userRole !== "super_admin") {
+    // Resolve role name
+    const roleObj = user.role as any;
+    const userRole = roleObj?.name || "";
+
+    // Allow super_admin, admin, and manager to log in
+    const allowedRoles = ["super_admin", "admin", "manager"];
+    if (!allowedRoles.includes(userRole)) {
       return NextResponse.json(
         {
           success: false,
-          message: "Access denied.",
+          message: "Access denied. Unauthorized role.",
         },
         { status: 403 },
       );

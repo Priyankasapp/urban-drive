@@ -1,18 +1,15 @@
 <!doctype html>
 
-<html class="light" lang="en">
+<html class="scroll-smooth" lang="en">
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>UrbanDrive | Executive Login</title>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
-    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <title>UrbanDrive | Executive Luxury Rentals</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&amp;display=swap"
       rel="stylesheet"
     />
-    <!-- Material Symbols -->
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
       rel="stylesheet"
@@ -21,106 +18,114 @@
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
       rel="stylesheet"
     />
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script id="tailwind-config">
       tailwind.config = {
         darkMode: "class",
         theme: {
           extend: {
             colors: {
+              "text-secondary": "#666666",
+              "primary-fixed-dim": "#c6c6c6",
               "primary-container": "#1b1b1b",
-              "on-secondary": "#ffffff",
-              tertiary: "#000000",
-              "on-secondary-container": "#616363",
-              "outline-variant": "#cfc4c5",
-              error: "#ba1a1a",
-              "on-tertiary-fixed": "#1b1b1b",
               "secondary-fixed-dim": "#c6c6c7",
-              "tertiary-fixed-dim": "#c6c6c6",
-              "surface-container-highest": "#e2e2e2",
+              "glass-fill": "rgba(255, 255, 255, 0.7)",
+              "tertiary-fixed": "#e2e2e2",
+              "surface-container-high": "#e8e8e8",
+              "inverse-primary": "#c6c6c6",
+              secondary: "#5d5f5f",
+              "on-primary-container": "#848484",
               "on-tertiary": "#ffffff",
-              "on-secondary-fixed": "#1a1c1c",
-              "inverse-on-surface": "#f1f1f1",
-              "on-tertiary-fixed-variant": "#474747",
-              "on-primary-fixed": "#1b1b1b",
-              "on-secondary-fixed-variant": "#454747",
-              "on-primary-fixed-variant": "#474747",
+              "surface-container": "#eeeeee",
+              "surface-variant": "#e2e2e2",
+              surface: "#F8F8F8",
+              "on-primary": "#ffffff",
               "error-container": "#ffdad6",
+              "outline-variant": "#cfc4c5",
+              "on-tertiary-fixed-variant": "#474747",
+              "on-tertiary-container": "#848484",
+              "on-error-container": "#93000a",
+              "inverse-surface": "#303030",
+              "surface-container-lowest": "#ffffff",
+              "on-surface-variant": "#4c4546",
+              "surface-container-highest": "#e2e2e2",
+              "on-primary-fixed": "#1b1b1b",
+              "inverse-on-surface": "#f1f1f1",
+              "primary-fixed": "#e2e2e2",
+              "on-secondary-fixed-variant": "#454747",
+              "tertiary-fixed-dim": "#c6c6c6",
+              "on-primary-fixed-variant": "#474747",
+              "surface-bright": "#f9f9f9",
+              "on-surface": "#1b1b1b",
+              "secondary-fixed": "#e2e2e2",
+              "on-background": "#1b1b1b",
+              "surface-tint": "#5e5e5e",
+              "surface-container-low": "#f3f3f3",
+              "on-tertiary-fixed": "#1b1b1b",
+              "text-primary": "#111111",
+              "on-secondary": "#ffffff",
+              error: "#ba1a1a",
+              "on-secondary-container": "#616363",
+              primary: "#000000",
+              "tertiary-container": "#1b1b1b",
+              "surface-dim": "#dadada",
+              "on-secondary-fixed": "#1a1c1c",
+              border: "#E5E5E5",
+              "on-error": "#ffffff",
               outline: "#7e7576",
               background: "#f9f9f9",
-              "surface-container-low": "#f3f3f3",
-              "on-primary-container": "#848484",
-              "text-primary": "#111111",
-              surface: "#F8F8F8",
-              "surface-container-lowest": "#ffffff",
-              "on-primary": "#ffffff",
-              "inverse-surface": "#303030",
-              "on-tertiary-container": "#848484",
-              "text-secondary": "#666666",
-              "primary-fixed": "#e2e2e2",
-              "surface-tint": "#5e5e5e",
-              border: "#E5E5E5",
-              "inverse-primary": "#c6c6c6",
+              tertiary: "#000000",
               "accent-success": "#22C55E",
-              "surface-bright": "#f9f9f9",
-              "primary-fixed-dim": "#c6c6c6",
-              "on-error-container": "#93000a",
-              "on-surface-variant": "#4c4546",
-              "on-error": "#ffffff",
-              "on-surface": "#1b1b1b",
-              "glass-fill": "rgba(255, 255, 255, 0.7)",
-              "secondary-fixed": "#e2e2e2",
-              "tertiary-fixed": "#e2e2e2",
-              primary: "#000000",
-              "surface-dim": "#dadada",
-              "surface-variant": "#e2e2e2",
-              "surface-container-high": "#e8e8e8",
               "secondary-container": "#dfe0e0",
-              "on-background": "#1b1b1b",
-              "tertiary-container": "#1b1b1b",
-              "surface-container": "#eeeeee",
-              secondary: "#5d5f5f",
             },
             borderRadius: {
               DEFAULT: "0.25rem",
               lg: "0.5rem",
               xl: "0.75rem",
               full: "9999px",
+              brand: "20px",
             },
             spacing: {
-              gutter: "24px",
               unit: "8px",
+              "margin-mobile": "20px",
               "container-max": "1440px",
               "margin-desktop": "64px",
-              "margin-mobile": "20px",
+              gutter: "24px",
             },
             fontFamily: {
               "headline-md": ["Inter"],
-              "headline-lg-mobile": ["Inter"],
-              "headline-lg": ["Inter"],
-              "label-sm": ["Inter"],
               "display-lg": ["Inter"],
-              "body-md": ["Inter"],
+              "headline-lg": ["Inter"],
               "body-lg": ["Inter"],
+              "headline-lg-mobile": ["Inter"],
+              "label-sm": ["Inter"],
+              "body-md": ["Inter"],
             },
             fontSize: {
               "headline-md": [
                 "24px",
                 { lineHeight: "32px", fontWeight: "600" },
               ],
-              "headline-lg-mobile": [
-                "28px",
+              "display-lg": [
+                "64px",
                 {
-                  lineHeight: "36px",
-                  letterSpacing: "-0.02em",
-                  fontWeight: "600",
+                  lineHeight: "72px",
+                  letterSpacing: "-0.04em",
+                  fontWeight: "700",
                 },
               ],
               "headline-lg": [
                 "32px",
                 {
                   lineHeight: "40px",
+                  letterSpacing: "-0.02em",
+                  fontWeight: "600",
+                },
+              ],
+              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+              "headline-lg-mobile": [
+                "28px",
+                {
+                  lineHeight: "36px",
                   letterSpacing: "-0.02em",
                   fontWeight: "600",
                 },
@@ -133,22 +138,18 @@
                   fontWeight: "600",
                 },
               ],
-              "display-lg": [
-                "64px",
-                {
-                  lineHeight: "72px",
-                  letterSpacing: "-0.04em",
-                  fontWeight: "700",
-                },
-              ],
               "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
-              "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
             },
           },
         },
       };
     </script>
     <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #ffffff;
+        color: #111111;
+      }
       .material-symbols-outlined {
         font-variation-settings:
           "FILL" 0,
@@ -157,231 +158,766 @@
           "opsz" 24;
       }
       .executive-shadow {
-        box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.04);
+        shadow: 0px 10px 40px rgba(0, 0, 0, 0.04);
       }
       .glass-panel {
-        background: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(20px);
+        background: rgba(255, 255, 255, 0.7);
       }
-      body {
-        background-color: #ffffff;
-        overflow-x: hidden;
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
       }
-      input:focus + label,
-      input:not(:placeholder-shown) + label {
-        transform: translateY(-24px) scale(0.85);
-        color: #111111;
-      }
-      .input-underline {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 0%;
-        height: 1px;
-        background-color: #000000;
-        transition: width 0.3s ease-out;
-      }
-      input:focus ~ .input-underline {
-        width: 100%;
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
       }
     </style>
   </head>
-  <body class="font-body-md text-text-primary antialiased">
-    <!-- TopAppBar Shell (Suppressed for focused Login, but keeping Wordmark for Branding) -->
+  <body class="bg-background">
+    <!-- TopAppBar -->
     <header
-      class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop py-8 bg-transparent pointer-events-none"
+      class="fixed top-0 w-full z-50 bg-glass-fill dark:bg-black/70 backdrop-blur-md transition-all duration-300"
     >
-      <div class="pointer-events-auto">
-        <span
-          class="font-headline-lg text-headline-lg font-black tracking-tighter text-primary"
-          >UrbanDrive</span
-        >
-      </div>
-      <div class="hidden md:flex gap-8 pointer-events-auto">
-        <a
-          class="font-label-sm text-label-sm text-text-secondary hover:text-primary transition-colors"
-          href="#"
-          >FLEET</a
-        >
-        <a
-          class="font-label-sm text-label-sm text-text-secondary hover:text-primary transition-colors"
-          href="#"
-          >CONCIERGE</a
-        >
-        <a
-          class="font-label-sm text-label-sm text-text-secondary hover:text-primary transition-colors"
-          href="#"
-          >SUPPORT</a
-        >
+      <div
+        class="max-w-[1440px] mx-auto flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 w-full"
+      >
+        <div class="flex items-center gap-4">
+          <span
+            class="material-symbols-outlined text-primary text-2xl cursor-pointer hover:opacity-80 transition-opacity"
+            >menu</span
+          >
+          <h1
+            class="font-headline-lg text-headline-lg font-bold tracking-tighter text-primary"
+          >
+            UrbanDrive
+          </h1>
+        </div>
+        <nav class="hidden md:flex gap-8 items-center">
+          <a
+            class="font-label-sm text-label-sm text-primary hover:opacity-80 transition-opacity"
+            href="#"
+            >FLEET</a
+          >
+          <a
+            class="font-label-sm text-label-sm text-text-secondary hover:opacity-80 transition-opacity"
+            href="#"
+            >COLLECTIONS</a
+          >
+          <a
+            class="font-label-sm text-label-sm text-text-secondary hover:opacity-80 transition-opacity"
+            href="#"
+            >LOCATIONS</a
+          >
+          <a
+            class="font-label-sm text-label-sm text-text-secondary hover:opacity-80 transition-opacity"
+            href="#"
+            >SUPPORT</a
+          >
+        </nav>
+        <div class="flex items-center gap-4">
+          <span
+            class="material-symbols-outlined text-primary text-2xl cursor-pointer hover:opacity-80 transition-opacity"
+            >account_circle</span
+          >
+        </div>
       </div>
     </header>
-    <main class="min-h-screen flex flex-col md:flex-row">
-      <!-- Visual Section (Split Left) -->
-      <section class="hidden md:flex w-1/2 relative overflow-hidden bg-black">
-        <div
-          class="absolute inset-0 z-10 bg-gradient-to-r from-black/20 via-transparent to-white/5"
-        ></div>
-        <div
-          class="absolute inset-0 w-full h-full bg-cover bg-center grayscale contrast-125 scale-105"
-          data-alt="A cinematic, high-contrast monochrome photograph of a sleek, black luxury sedan parked on a rain-slicked city street at night. Towering skyscrapers with illuminated windows create a dramatic urban canyon. The lighting is moody and atmospheric, with bright highlights reflecting off the car's polished surface and the wet pavement. The overall aesthetic is executive, minimalist, and powerful, capturing a sense of high-end movement and urban sophistication."
-          style="
-            background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuD14XN9DOxiZwZRgKieQkxHLjbWosV3Qp-ieJjo0Zv__Uh8Sc51RqaRHv_xXD2zeScFOxjmr4zFoW17tv1KN6OZOv1TJGpV4O137OO0B9wbe5AzVyONJ7CExJvZz-0YdB0uczAP6IiyGIFZcr69PiyBWEedffAyUHrevC9Xka2WdrL8ckbK1r6Wy8mydvXX72ys6lH-QesgXY9KEbGvkxmy2ybGsHojPXTl5gcGRmokMcLynvaKpGcYu8JjgZnHddbrwkjpPYjtFCWs&quot;);
-          "
-        ></div>
-        <div
-          class="absolute bottom-margin-desktop left-margin-desktop z-20 max-w-lg"
-        >
-          <p
-            class="font-label-sm text-label-sm text-on-secondary/60 mb-2 uppercase tracking-widest"
-          >
-            Global Access
-          </p>
-          <h2
-            class="font-display-lg text-headline-lg md:text-display-lg text-on-secondary leading-tight"
-          >
-            Precision in motion.
-          </h2>
-        </div>
-      </section>
-      <!-- Login Form Section (Split Right) -->
+    <main class="pt-0">
+      <!-- Hero Section -->
       <section
-        class="w-full md:w-1/2 flex items-center justify-center bg-white px-margin-mobile md:px-margin-desktop py-20 relative"
+        class="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden"
       >
-        <div class="w-full max-w-md">
-          <!-- Branding for Mobile -->
-          <div class="md:hidden mb-12">
-            <span
-              class="font-headline-lg-mobile text-headline-lg-mobile font-black tracking-tighter text-primary"
-              >UrbanDrive</span
+        <div class="absolute inset-0 z-0">
+          <div
+            class="w-full h-full bg-cover bg-center transition-transform duration-1000 scale-105"
+            data-alt="A high-fidelity cinematic shot of a sleek silver luxury sports car parked on a minimalist asphalt road against a clean, architectural white background. The lighting is soft and directional, highlighting the car's aerodynamic curves and metallic finish. The overall aesthetic is executive, modern, and high-end, mirroring a premium automotive brochure."
+            style="
+              background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuCCtIICYk2IRYUA2e1YGnutDYyJF3C56bS3zh7xwMs2Jb7271j0sLB2rCyNxZgEh58Ml_7hZtJZy318Y6SZqm3Ou-xlMyFYFjIJDCW9O2o8q7PugJ7McPxP3lMyJOxDJzyWOT4FGmjS6T7XIvc43yRHy0RkrSyII8AlJ4WUh_qhl_fmMcowthZR6nFJ4JVTriq4JRLrIQDOe0BbXUBM_r-g4u5RNJGTVD5WcycChM_GCWZ57PZa1bbYY686I4XandEWQ8fQrI9R9agC&quot;);
+            "
+          ></div>
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"
+          ></div>
+        </div>
+        <div
+          class="relative z-10 w-full max-w-[1440px] px-margin-mobile md:px-margin-desktop text-center md:text-left"
+        >
+          <div class="max-w-2xl">
+            <h2
+              class="font-display-lg text-display-lg text-primary mb-6 leading-tight"
             >
-          </div>
-          <div class="mb-12">
-            <h1
-              class="font-headline-lg text-headline-lg text-text-primary mb-2"
+              Elite Drive.<br />Urban Soul.
+            </h2>
+            <p
+              class="font-body-lg text-body-lg text-text-secondary mb-12 max-w-lg"
             >
-              Executive Portal
-            </h1>
-            <p class="font-body-md text-text-secondary">
-              Secure verification for authorized personnel.
+              Experience the pinnacle of automotive engineering with our curated
+              fleet of ultra-luxury vehicles. Designed for those who demand
+              precision and prestige.
             </p>
-          </div>
-          <form class="space-y-10" onsubmit="event.preventDefault()">
-            <!-- Corporate Email Input -->
-            <div class="relative group">
-              <input
-                class="peer w-full bg-transparent border-0 border-b border-border py-4 focus:ring-0 focus:outline-none font-body-lg transition-colors placeholder-transparent"
-                id="email"
-                placeholder=" "
-                type="email"
-              />
-              <label
-                class="absolute left-0 top-4 text-text-secondary font-body-md pointer-events-none transition-all duration-300 origin-left"
-                for="email"
+            <!-- Glassmorphism Search Control -->
+            <div
+              class="glass-panel p-2 rounded-brand shadow-[0px_10px_40px_rgba(0,0,0,0.04)] flex flex-col md:flex-row items-center gap-2 border border-white/50 max-w-3xl"
+            >
+              <div
+                class="flex-1 w-full px-6 py-4 flex items-center gap-3 border-b md:border-b-0 md:border-r border-border/50"
               >
-                Corporate Email
-              </label>
-              <div class="input-underline"></div>
-            </div>
-            <!-- Security Key (Password) Input -->
-            <div class="relative group">
-              <input
-                class="peer w-full bg-transparent border-0 border-b border-border py-4 focus:ring-0 focus:outline-none font-body-lg transition-colors placeholder-transparent"
-                id="password"
-                placeholder=" "
-                type="password"
-              />
-              <label
-                class="absolute left-0 top-4 text-text-secondary font-body-md pointer-events-none transition-all duration-300 origin-left"
-                for="password"
-              >
-                Security Key
-              </label>
-              <div class="input-underline"></div>
-              <button
-                class="absolute right-0 top-4 text-text-secondary hover:text-primary transition-colors"
-                type="button"
-              >
-                <span class="material-symbols-outlined text-[20px]"
-                  >visibility_off</span
+                <span class="material-symbols-outlined text-text-secondary"
+                  >location_on</span
                 >
+                <input
+                  class="bg-transparent border-none focus:ring-0 w-full font-body-md text-primary placeholder:text-text-secondary"
+                  placeholder="Pickup Location"
+                  type="text"
+                />
+              </div>
+              <div class="flex-1 w-full px-6 py-4 flex items-center gap-3">
+                <span class="material-symbols-outlined text-text-secondary"
+                  >calendar_today</span
+                >
+                <input
+                  class="bg-transparent border-none focus:ring-0 w-full font-body-md text-primary placeholder:text-text-secondary"
+                  placeholder="Dates"
+                  type="text"
+                />
+              </div>
+              <button
+                class="w-full md:w-auto bg-black text-white px-10 py-4 rounded-brand font-label-sm text-label-sm hover:bg-zinc-800 transition-colors uppercase tracking-widest"
+              >
+                Search
               </button>
             </div>
-            <!-- Actions -->
-            <div class="flex items-center justify-between pt-4">
-              <div class="flex items-center gap-2">
-                <input
-                  class="w-4 h-4 text-primary bg-surface border-border rounded-sm focus:ring-primary focus:ring-offset-0"
-                  id="remember"
-                  type="checkbox"
-                />
-                <label
-                  class="font-label-sm text-label-sm text-text-secondary cursor-pointer"
-                  for="remember"
-                  >Remember Access</label
-                >
-              </div>
-              <a
-                class="font-label-sm text-label-sm text-text-secondary hover:text-primary transition-colors underline decoration-border underline-offset-4"
-                href="#"
-                >Forgot Password</a
+          </div>
+        </div>
+      </section>
+      <!-- Collections Section -->
+      <section
+        class="py-margin-desktop max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop"
+      >
+        <div class="flex justify-between items-end mb-12">
+          <div>
+            <p
+              class="font-label-sm text-label-sm text-text-secondary tracking-[0.2em] uppercase mb-2"
+            >
+              Curated selection
+            </p>
+            <h3 class="font-headline-lg text-headline-lg text-primary">
+              Collections
+            </h3>
+          </div>
+          <a
+            class="hidden md:flex items-center gap-2 font-label-sm text-label-sm text-primary group"
+            href="#"
+          >
+            VIEW ALL
+            <span
+              class="material-symbols-outlined group-hover:translate-x-1 transition-transform"
+              >arrow_forward</span
+            >
+          </a>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+          <div class="group cursor-pointer">
+            <div
+              class="bg-surface rounded-brand h-48 mb-4 flex flex-col items-center justify-center transition-all duration-300 group-hover:bg-white group-hover:shadow-[0px_10px_40px_rgba(0,0,0,0.04)] border border-transparent group-hover:border-border"
+            >
+              <span
+                class="material-symbols-outlined text-4xl mb-4 text-primary"
+                style="font-variation-settings: &quot;wght&quot; 200"
+                >speed</span
+              >
+              <span
+                class="font-label-sm text-label-sm text-primary uppercase tracking-widest"
+                >Sports</span
               >
             </div>
-            <button
-              class="w-full bg-primary text-on-primary py-5 rounded-none font-label-sm text-label-sm uppercase tracking-widest hover:bg-neutral-800 active:scale-[0.98] transition-all duration-300 executive-shadow"
+          </div>
+          <div class="group cursor-pointer">
+            <div
+              class="bg-surface rounded-brand h-48 mb-4 flex flex-col items-center justify-center transition-all duration-300 group-hover:bg-white group-hover:shadow-[0px_10px_40px_rgba(0,0,0,0.04)] border border-transparent group-hover:border-border"
             >
-              Authenticate Access
-            </button>
-          </form>
-          <div class="mt-12 pt-8 border-t border-border flex flex-col gap-4">
-            <p
-              class="font-label-sm text-label-sm text-text-secondary text-center"
-            >
-              New to UrbanDrive?
-              <a
-                class="text-primary font-bold ml-1 hover:underline underline-offset-4"
-                href="#"
-                >Create Account</a
+              <span
+                class="material-symbols-outlined text-4xl mb-4 text-primary"
+                style="font-variation-settings: &quot;wght&quot; 200"
+                >grid_view</span
               >
+              <span
+                class="font-label-sm text-label-sm text-primary uppercase tracking-widest"
+                >SUV</span
+              >
+            </div>
+          </div>
+          <div class="group cursor-pointer">
+            <div
+              class="bg-surface rounded-brand h-48 mb-4 flex flex-col items-center justify-center transition-all duration-300 group-hover:bg-white group-hover:shadow-[0px_10px_40px_rgba(0,0,0,0.04)] border border-transparent group-hover:border-border"
+            >
+              <span
+                class="material-symbols-outlined text-4xl mb-4 text-primary"
+                style="font-variation-settings: &quot;wght&quot; 200"
+                >bolt</span
+              >
+              <span
+                class="font-label-sm text-label-sm text-primary uppercase tracking-widest"
+                >Electric</span
+              >
+            </div>
+          </div>
+          <div class="group cursor-pointer">
+            <div
+              class="bg-surface rounded-brand h-48 mb-4 flex flex-col items-center justify-center transition-all duration-300 group-hover:bg-white group-hover:shadow-[0px_10px_40px_rgba(0,0,0,0.04)] border border-transparent group-hover:border-border"
+            >
+              <span
+                class="material-symbols-outlined text-4xl mb-4 text-primary"
+                style="font-variation-settings: &quot;wght&quot; 200"
+                >history</span
+              >
+              <span
+                class="font-label-sm text-label-sm text-primary uppercase tracking-widest"
+                >Vintage</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Featured Fleet Section -->
+      <section class="bg-surface py-32 overflow-hidden">
+        <div
+          class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop"
+        >
+          <div class="mb-16">
+            <h3 class="font-headline-lg text-headline-lg text-primary mb-2">
+              Featured Fleet
+            </h3>
+            <p class="font-body-md text-body-md text-text-secondary">
+              Precision performance meet executive luxury.
             </p>
           </div>
-          <!-- Footer Links -->
-          <div class="mt-20 flex justify-center gap-6">
-            <a
-              class="font-label-sm text-label-sm text-text-secondary/50 hover:text-text-secondary transition-colors"
-              href="#"
-              >Privacy</a
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <!-- Car Card 1 -->
+            <div
+              class="bg-white rounded-brand overflow-hidden group shadow-[0px_10px_40px_rgba(0,0,0,0.04)] border border-border flex flex-col"
             >
-            <a
-              class="font-label-sm text-label-sm text-text-secondary/50 hover:text-text-secondary transition-colors"
-              href="#"
-              >Legal</a
+              <div class="relative h-[400px] overflow-hidden">
+                <div
+                  class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
+                  data-alt="A side-profile silhouette of a sleek dark grey Porsche Taycan. The car is showcased in a high-contrast studio setting with professional top-lighting reflecting off its glossy surface. The background is a clean, neutral white, emphasizing the electric sports car's aerodynamic design and modern elegance."
+                  style="
+                    background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuBtrCUhlB0AYpvLfhIFJCP9SsLjuK2FGFTfk-rfgjgNe8ZjsvInmJG-aQeRKuIN138NyW3QsDvojqMOSoMvupBLpaoa7LX9_gMyyqDt_IHguhmR2FiQaY-KZautlljdOO-QFUDH1CvC0IdB6AgB5QDURnbixKL0denSdVYyZRrc8b0YGXeuwW_mzN3bq78MWohEB8i1SVvW3x2MHA4PSceZ4dSB9MYdWokguP0BxrBDZXSS4cXUyDuA4zlIG6PMRUGoGX6UKXaOiIKX&quot;);
+                  "
+                ></div>
+                <div
+                  class="absolute top-6 left-6 bg-black text-white px-4 py-1 rounded-full text-label-sm font-label-sm tracking-wider uppercase"
+                >
+                  Electric
+                </div>
+              </div>
+              <div class="p-8 flex-1 flex flex-col">
+                <div class="flex justify-between items-start mb-6">
+                  <div>
+                    <h4 class="font-headline-md text-headline-md text-primary">
+                      Porsche Taycan Turbo S
+                    </h4>
+                    <p class="font-body-md text-text-secondary">
+                      Excellence in Motion
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <span class="font-headline-md text-headline-md text-primary"
+                      >$499</span
+                    >
+                    <span
+                      class="font-label-sm text-label-sm text-text-secondary"
+                      >/ DAY</span
+                    >
+                  </div>
+                </div>
+                <div
+                  class="grid grid-cols-3 gap-4 border-t border-border pt-6 mt-auto"
+                >
+                  <div class="flex flex-col gap-1">
+                    <span
+                      class="font-label-sm text-[10px] text-text-secondary uppercase tracking-widest"
+                      >Transmission</span
+                    >
+                    <span class="font-body-md font-semibold text-primary"
+                      >Auto</span
+                    >
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <span
+                      class="font-label-sm text-[10px] text-text-secondary uppercase tracking-widest"
+                      >Power</span
+                    >
+                    <span class="font-body-md font-semibold text-primary"
+                      >750 HP</span
+                    >
+                  </div>
+                  <div class="flex flex-col gap-1 text-right">
+                    <span
+                      class="font-label-sm text-[10px] text-text-secondary uppercase tracking-widest"
+                      >0-60 MPH</span
+                    >
+                    <span class="font-body-md font-semibold text-primary"
+                      >2.6s</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Car Card 2 -->
+            <div
+              class="bg-white rounded-brand overflow-hidden group shadow-[0px_10px_40px_rgba(0,0,0,0.04)] border border-border flex flex-col"
             >
-            <a
-              class="font-label-sm text-label-sm text-text-secondary/50 hover:text-text-secondary transition-colors"
-              href="#"
-              >© 2024 UrbanDrive</a
-            >
+              <div class="relative h-[400px] overflow-hidden">
+                <div
+                  class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700"
+                  data-alt="A front-quarter view of a white Range Rover Autobiography in a minimalist modern setting. The lighting is soft and expansive, casting subtle shadows that highlight the SUV's bold stance and iconic silhouette. The style is bright and airy, using a monochromatic high-key palette of whites and soft grays."
+                  style="
+                    background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuAprxxhu5rMc_h0TXUyZ7RY_vxogjPr6rhOfw7jFmOaky_zZ9nxxbXRE98zyHss8lC9xdmhr152bVo3oF9r7GT_RAMo67bzH1Xg_VCIlrj2tiL3W7XRbBZTLS8gaaobZl3oD9XY5z8ws5TKFIfAG-lm_yaGXnmlJ6Tz_cR7InBx2BupMJnxWl_w22_LL1yLyoe-_vI6wGU4Jj967TMpwPMxmcHWv-SfaskDrHpgodx17VhOtnVokVk1tAZybZqT5otnxub3MCU1E4hn&quot;);
+                  "
+                ></div>
+                <div
+                  class="absolute top-6 left-6 bg-black text-white px-4 py-1 rounded-full text-label-sm font-label-sm tracking-wider uppercase"
+                >
+                  Luxury SUV
+                </div>
+              </div>
+              <div class="p-8 flex-1 flex flex-col">
+                <div class="flex justify-between items-start mb-6">
+                  <div>
+                    <h4 class="font-headline-md text-headline-md text-primary">
+                      Range Rover Autobiography
+                    </h4>
+                    <p class="font-body-md text-text-secondary">
+                      Unmatched Comfort
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <span class="font-headline-md text-headline-md text-primary"
+                      >$350</span
+                    >
+                    <span
+                      class="font-label-sm text-label-sm text-text-secondary"
+                      >/ DAY</span
+                    >
+                  </div>
+                </div>
+                <div
+                  class="grid grid-cols-3 gap-4 border-t border-border pt-6 mt-auto"
+                >
+                  <div class="flex flex-col gap-1">
+                    <span
+                      class="font-label-sm text-[10px] text-text-secondary uppercase tracking-widest"
+                      >Transmission</span
+                    >
+                    <span class="font-body-md font-semibold text-primary"
+                      >Auto</span
+                    >
+                  </div>
+                  <div class="flex flex-col gap-1">
+                    <span
+                      class="font-label-sm text-[10px] text-text-secondary uppercase tracking-widest"
+                      >Power</span
+                    >
+                    <span class="font-body-md font-semibold text-primary"
+                      >523 HP</span
+                    >
+                  </div>
+                  <div class="flex flex-col gap-1 text-right">
+                    <span
+                      class="font-label-sm text-[10px] text-text-secondary uppercase tracking-widest"
+                      >Passengers</span
+                    >
+                    <span class="font-body-md font-semibold text-primary"
+                      >5</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Why Choose Us Section -->
+      <section class="py-32 bg-white">
+        <div
+          class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop"
+        >
+          <div class="text-center max-w-2xl mx-auto mb-20">
+            <h3 class="font-headline-lg text-headline-lg text-primary mb-4">
+              The UrbanDrive Advantage
+            </h3>
+            <p class="font-body-md text-text-secondary">
+              We redefine car rental through a white-glove service model built
+              on transparency and speed.
+            </p>
+          </div>
+          <div class="grid md:grid-cols-3 gap-16">
+            <div class="flex flex-col items-center text-center">
+              <div
+                class="w-16 h-16 rounded-full border border-border flex items-center justify-center mb-6"
+              >
+                <span
+                  class="material-symbols-outlined text-3xl text-primary"
+                  style="font-variation-settings: &quot;wght&quot; 200"
+                  >verified</span
+                >
+              </div>
+              <h4
+                class="font-headline-md text-headline-md text-primary mb-3 text-lg"
+              >
+                Curated Excellence
+              </h4>
+              <p class="font-body-md text-text-secondary">
+                Every vehicle in our fleet undergoes a rigorous 200-point
+                inspection before every delivery.
+              </p>
+            </div>
+            <div class="flex flex-col items-center text-center">
+              <div
+                class="w-16 h-16 rounded-full border border-border flex items-center justify-center mb-6"
+              >
+                <span
+                  class="material-symbols-outlined text-3xl text-primary"
+                  style="font-variation-settings: &quot;wght&quot; 200"
+                  >speed</span
+                >
+              </div>
+              <h4
+                class="font-headline-md text-headline-md text-primary mb-3 text-lg"
+              >
+                Instant Approval
+              </h4>
+              <p class="font-body-md text-text-secondary">
+                Our advanced vetting system means you can be behind the wheel in
+                under 15 minutes.
+              </p>
+            </div>
+            <div class="flex flex-col items-center text-center">
+              <div
+                class="w-16 h-16 rounded-full border border-border flex items-center justify-center mb-6"
+              >
+                <span
+                  class="material-symbols-outlined text-3xl text-primary"
+                  style="font-variation-settings: &quot;wght&quot; 200"
+                  >support_agent</span
+                >
+              </div>
+              <h4
+                class="font-headline-md text-headline-md text-primary mb-3 text-lg"
+              >
+                24/7 Concierge
+              </h4>
+              <p class="font-body-md text-text-secondary">
+                A dedicated specialist is available round-the-clock for any
+                request during your rental period.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Global Presence Section -->
+      <section class="py-32 bg-primary text-white overflow-hidden relative">
+        <div class="absolute inset-0 opacity-20 pointer-events-none">
+          <div
+            class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/20 via-transparent to-transparent"
+          ></div>
+        </div>
+        <div
+          class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop relative z-10"
+        >
+          <div
+            class="flex flex-col md:flex-row justify-between items-center gap-16"
+          >
+            <div class="max-w-xl">
+              <h3 class="font-display-lg text-4xl md:text-5xl mb-6">
+                A Global Network of Performance.
+              </h3>
+              <p class="text-on-primary-container text-body-lg mb-8">
+                Operating in 12 major financial hubs across three continents,
+                providing consistency for the global professional.
+              </p>
+              <div class="flex gap-4">
+                <button
+                  class="bg-white text-black px-8 py-3 rounded-brand font-label-sm text-label-sm uppercase tracking-widest hover:bg-zinc-200 transition-colors"
+                >
+                  Explore Locations
+                </button>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-12 text-center">
+              <div>
+                <div class="text-6xl font-black mb-2 counter" data-target="12">
+                  0
+                </div>
+                <p
+                  class="font-label-sm text-label-sm text-on-primary-container tracking-widest uppercase"
+                >
+                  Major Cities
+                </p>
+              </div>
+              <div>
+                <div class="text-6xl font-black mb-2 counter" data-target="150">
+                  0
+                </div>
+                <p
+                  class="font-label-sm text-label-sm text-on-primary-container tracking-widest uppercase"
+                >
+                  Premium Cars
+                </p>
+              </div>
+              <div>
+                <div class="text-6xl font-black mb-2 counter" data-target="24">
+                  0
+                </div>
+                <p
+                  class="font-label-sm text-label-sm text-on-primary-container tracking-widest uppercase"
+                >
+                  Hour Support
+                </p>
+              </div>
+              <div>
+                <div class="text-6xl font-black mb-2 counter" data-target="98">
+                  0
+                </div>
+                <p
+                  class="font-label-sm text-label-sm text-on-primary-container tracking-widest uppercase"
+                >
+                  % Satisfaction
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
     </main>
-    <!-- Subtle atmospheric JS for the image section -->
+    <!-- Footer -->
+    <footer class="bg-white pt-24 pb-12 border-t border-border">
+      <div class="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop">
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20"
+        >
+          <div class="col-span-1 lg:col-span-1">
+            <h2
+              class="font-headline-lg text-headline-lg font-bold tracking-tighter text-primary mb-6"
+            >
+              UrbanDrive
+            </h2>
+            <p class="font-body-md text-text-secondary mb-8">
+              The world's most exclusive car rental platform. Defined by
+              performance, delivered with precision.
+            </p>
+            <div class="flex gap-4">
+              <a
+                class="w-10 h-10 rounded-full border border-border flex items-center justify-center text-primary hover:bg-black hover:text-white transition-all"
+                href="#"
+                ><span class="material-symbols-outlined text-xl">share</span></a
+              >
+              <a
+                class="w-10 h-10 rounded-full border border-border flex items-center justify-center text-primary hover:bg-black hover:text-white transition-all"
+                href="#"
+                ><span class="material-symbols-outlined text-xl"
+                  >camera</span
+                ></a
+              >
+            </div>
+          </div>
+          <div class="lg:ml-auto">
+            <h5
+              class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-6"
+            >
+              Fleet
+            </h5>
+            <ul class="flex flex-col gap-4">
+              <li>
+                <a
+                  class="font-body-md text-text-secondary hover:text-primary transition-colors"
+                  href="#"
+                  >Exotic Sports</a
+                >
+              </li>
+              <li>
+                <a
+                  class="font-body-md text-text-secondary hover:text-primary transition-colors"
+                  href="#"
+                  >Executive SUVs</a
+                >
+              </li>
+              <li>
+                <a
+                  class="font-body-md text-text-secondary hover:text-primary transition-colors"
+                  href="#"
+                  >Next-Gen Electric</a
+                >
+              </li>
+              <li>
+                <a
+                  class="font-body-md text-text-secondary hover:text-primary transition-colors"
+                  href="#"
+                  >Classic Collection</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="lg:ml-auto">
+            <h5
+              class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-6"
+            >
+              Company
+            </h5>
+            <ul class="flex flex-col gap-4">
+              <li>
+                <a
+                  class="font-body-md text-text-secondary hover:text-primary transition-colors"
+                  href="#"
+                  >About Us</a
+                >
+              </li>
+              <li>
+                <a
+                  class="font-body-md text-text-secondary hover:text-primary transition-colors"
+                  href="#"
+                  >Our Process</a
+                >
+              </li>
+              <li>
+                <a
+                  class="font-body-md text-text-secondary hover:text-primary transition-colors"
+                  href="#"
+                  >Contact</a
+                >
+              </li>
+              <li>
+                <a
+                  class="font-body-md text-text-secondary hover:text-primary transition-colors"
+                  href="#"
+                  >Locations</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="lg:ml-auto">
+            <h5
+              class="font-label-sm text-label-sm text-primary uppercase tracking-widest mb-6"
+            >
+              Newsletter
+            </h5>
+            <p class="font-body-md text-text-secondary mb-6">
+              Stay updated with our latest fleet arrivals.
+            </p>
+            <div class="relative">
+              <input
+                class="w-full bg-surface border border-border rounded-brand px-4 py-3 focus:ring-0 focus:border-primary transition-colors placeholder:text-text-secondary font-body-md"
+                placeholder="Email Address"
+                type="email"
+              />
+              <button
+                class="absolute right-2 top-2 bg-black text-white px-4 py-1 rounded-lg text-sm hover:bg-zinc-800 transition-colors"
+              >
+                Join
+              </button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="flex flex-col md:flex-row justify-between items-center pt-12 border-t border-border gap-6"
+        >
+          <p class="font-label-sm text-label-sm text-text-secondary">
+            © 2024 URBAN DRIVE EXECUTIVE. ALL RIGHTS RESERVED.
+          </p>
+          <div class="flex gap-8">
+            <a
+              class="font-label-sm text-label-sm text-text-secondary hover:text-primary"
+              href="#"
+              >Privacy Policy</a
+            >
+            <a
+              class="font-label-sm text-label-sm text-text-secondary hover:text-primary"
+              href="#"
+              >Terms of Service</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- BottomNavBar (Mobile only) -->
+    <div
+      class="md:hidden fixed bottom-0 left-0 w-full flex justify-around items-center h-20 px-4 pb-safe bg-surface z-50 shadow-[0px_-10px_40px_rgba(0,0,0,0.04)] border-t border-border"
+    >
+      <div
+        class="flex flex-col items-center justify-center text-primary scale-110"
+      >
+        <span
+          class="material-symbols-outlined text-2xl"
+          style="font-variation-settings: &quot;FILL&quot; 1"
+          >home</span
+        >
+        <span class="font-label-sm text-[10px] mt-1">Home</span>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-text-secondary hover:text-primary transition-colors"
+      >
+        <span class="material-symbols-outlined text-2xl">explore</span>
+        <span class="font-label-sm text-[10px] mt-1">Explore</span>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-text-secondary hover:text-primary transition-colors"
+      >
+        <span class="material-symbols-outlined text-2xl">directions_car</span>
+        <span class="font-label-sm text-[10px] mt-1">Fleet</span>
+      </div>
+      <div
+        class="flex flex-col items-center justify-center text-text-secondary hover:text-primary transition-colors"
+      >
+        <span class="material-symbols-outlined text-2xl">person</span>
+        <span class="font-label-sm text-[10px] mt-1">Profile</span>
+      </div>
+    </div>
     <script>
-      document.addEventListener("mousemove", (e) => {
-        const visual = document.querySelector(
-          'section div[style*="background-image"]',
-        );
-        if (!visual) return;
+      // Simple Intersection Observer for counters
+      const observerOptions = {
+        threshold: 0.5,
+      };
 
-        const x = (e.clientX / window.innerWidth - 0.5) * 15;
-        const y = (e.clientY / window.innerHeight - 0.5) * 15;
+      const counterObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const counter = entry.target;
+            const target = +counter.getAttribute("data-target");
+            const duration = 2000; // 2 seconds
+            const increment = target / (duration / 16); // roughly 60fps
 
-        visual.style.transform = `scale(1.05) translate(${x}px, ${y}px)`;
+            let currentCount = 0;
+            const updateCounter = () => {
+              currentCount += increment;
+              if (currentCount < target) {
+                counter.innerText = Math.ceil(currentCount);
+                requestAnimationFrame(updateCounter);
+              } else {
+                counter.innerText = target;
+              }
+            };
+            updateCounter();
+            observer.unobserve(counter);
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll(".counter").forEach((counter) => {
+        counterObserver.observe(counter);
       });
 
-      // Suppress nav as per instructions for Task-Focused Login
-      // BottomNavBar suppression logic:
-      // Page intent is Transactional (Login), so BottomNavBar is omitted.
+      // Sticky header transition
+      window.addEventListener("scroll", () => {
+        const header = document.querySelector("header");
+        if (window.scrollY > 50) {
+          header.classList.add("py-2", "shadow-sm");
+          header.classList.remove("py-4");
+        } else {
+          header.classList.add("py-4");
+          header.classList.remove("py-2", "shadow-sm");
+        }
+      });
     </script>
   </body>
 </html>

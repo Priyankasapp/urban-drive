@@ -1,10 +1,13 @@
+import mongoose, { Schema, Document, Model } from "mongoose";
+
 /**
  * Defines the user roles available in the car rental ecosystem.
  */
 export enum UserRole {
-  CUSTOMER = "customer", // Can browse cars, create bookings, manage own profile
-  FLEET_MANAGER = "manager", // Can add/edit cars, manage maintenance status
+  SUPER_ADMIN = "super_admin", // Full system override, billing, platform management
   ADMIN = "admin", // Full system access, manages staff, financial data, and overrides
+  FLEET_MANAGER = "manager", // Can add/edit cars, manage maintenance status
+  CUSTOMER = "customer", // Can browse cars, create bookings, manage own profile
 }
 
 /**
@@ -24,14 +27,8 @@ export type Permission =
 /**
  * Role-to-Permission mapping matrix.
  */
-export const RolePermissions: Record<UserRole, Permission[]> = {
-  [UserRole.CUSTOMER]: ["cars:read", "bookings:create", "bookings:read_own"],
-  [UserRole.FLEET_MANAGER]: [
-    "cars:read",
-    "cars:write",
-    "bookings:read_all",
-    "bookings:manage",
-  ],
+export const RolePermissions: Record<UserRole, Permission[] | string[]> = {
+  [UserRole.SUPER_ADMIN]: ["*"],
   [UserRole.ADMIN]: [
     "cars:read",
     "cars:write",
@@ -42,6 +39,13 @@ export const RolePermissions: Record<UserRole, Permission[]> = {
     "reports:view",
     "users:manage",
   ],
+  [UserRole.FLEET_MANAGER]: [
+    "cars:read",
+    "cars:write",
+    "bookings:read_all",
+    "bookings:manage",
+  ],
+  [UserRole.CUSTOMER]: ["cars:read", "bookings:create", "bookings:read_own"],
 };
 
 /**
@@ -56,5 +60,38 @@ export function hasPermission(
 ): boolean {
   const permissions = RolePermissions[role as UserRole];
   if (!permissions) return false;
-  return permissions.includes(permission);
+  if (permissions.includes("*")) return true;
+  return (permissions as Permission[]).includes(permission);
 }
+
+export interface IRole extends Document {
+  name: string; // e.g. "super_admin", "admin", "manager", "customer"
+  permissions: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const RoleSchema = new Schema<IRole>(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    permissions: {
+      type: [String],
+      default: [],
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
+
+const Role: Model<IRole> =
+  mongoose.models.Role || mongoose.model<IRole>("Role", RoleSchema);
+
+export default Role;
+
