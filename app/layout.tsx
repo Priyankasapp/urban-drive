@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
 import { AuthProvider } from "@/context/AuthContext";
+import { CarProvider } from "@/context/CarContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "UrbanDrive - Premium Car Rental",
-  description: "Experience the pinnacle of automotive engineering with our curated fleet of luxury vehicles.",
+  description:
+    "Experience the pinnacle of automotive engineering with our curated fleet of luxury vehicles.",
 };
 
 export default function RootLayout({
@@ -30,7 +31,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <CarProvider>{children}</CarProvider>
+        </AuthProvider>
       </body>
     </html>
   );

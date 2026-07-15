@@ -2,29 +2,61 @@
 
 import { useState } from "react";
 import { Upload, ArrowRight, X } from "lucide-react";
+import { useCars, CarFormData } from "@/context/CarContext";
 
 interface AddCarModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-export default function AddCarModal({ isOpen, onClose }: AddCarModalProps) {
-  // 1. Change state to an array of strings to hold multiple images
+export default function AddCarModal({
+  isOpen,
+  onClose,
+  onSuccess,
+}: AddCarModalProps) {
+  // Pull centralized states and mutation controllers directly from our context engine
+  const { addNewCar, loading, errorMsg, setErrorMsg } = useCars();
+
+  const [formData, setFormData] = useState<CarFormData>({
+    brand: "",
+    model: "",
+    category: "Exotic / Sports",
+    transmission: "Automatic",
+    fuelType: "Premium Gasoline",
+    seats: "2",
+    horsepower: "",
+    acceleration: "",
+    location: "",
+    pricePerDay: "",
+    description: "",
+    status: "available",
+  });
+
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   if (!isOpen) return null;
 
-  // 2. Process multiple file selections seamlessly
+  const handleInputChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
+    const { id, value } = e.target;
+    setFormData((prev) => ({ ...prev, [id]: value }));
+  };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
       const fileArray = Array.from(files);
+      setSelectedFiles((prev) => [...prev, ...fileArray]);
 
       fileArray.forEach((file) => {
         const reader = new FileReader();
         reader.onloadend = () => {
           if (reader.result) {
-            // Append the new image to the existing preview array
             setImagePreviews((prev) => [...prev, reader.result as string]);
           }
         };
@@ -33,291 +65,377 @@ export default function AddCarModal({ isOpen, onClose }: AddCarModalProps) {
     }
   };
 
-  // 3. Remove a single specific image by its index
   const removeImage = (indexToRemove: number) => {
     setImagePreviews((prev) =>
       prev.filter((_, index) => index !== indexToRemove),
     );
+    setSelectedFiles((prev) =>
+      prev.filter((_, index) => index !== indexToRemove),
+    );
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Fire the form data context action handler
+    const isSuccess = await addNewCar(formData, selectedFiles);
+
+    if (isSuccess) {
+      // Flush client data buffers entirely upon verified DB transaction success
+      setSelectedFiles([]);
+      setImagePreviews([]);
+      setFormData({
+        brand: "",
+        model: "",
+        category: "Exotic / Sports",
+        transmission: "Automatic",
+        fuelType: "Premium Gasoline",
+        seats: "2",
+        horsepower: "",
+        acceleration: "",
+        location: "",
+        pricePerDay: "",
+        description: "",
+        status: "available",
+      });
+
+      if (onSuccess) onSuccess();
+      onClose();
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Dark Ambient Glass Backdrop */}
+      {/* Backdrop overlay layer */}
       <div
         onClick={onClose}
-        className="absolute inset-0 bg-ink/30 backdrop-blur-sm transition-opacity duration-300"
+        className="absolute inset-0 bg-ink/30 backdrop-blur-sm"
       />
 
-      {/* Main Glassmorphic Modal Content Container */}
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-ink/80 backdrop-blur-xl border border-canvas/10 text-canvas rounded-xl shadow-2xl p-6 md:p-8 z-10 animate-fade-in flex flex-col gap-6">
-        {/* Modal Header */}
+      {/* Modal Container */}
+      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-ink/80 backdrop-blur-xl border border-canvas/10 text-canvas rounded-xl p-6 md:p-8 z-10 flex flex-col gap-6">
         <header className="flex items-center justify-between pb-4 border-b border-canvas/5">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">
               Add New Fleet Asset
             </h2>
             <p className="text-xs text-canvas/50 mt-0.5">
-              Register a high-performance vehicle into the global system.
+              Asset registration pipelined through CarContext.
             </p>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="p-1.5 rounded-full hover:bg-canvas/10 text-canvas/60 hover:text-canvas transition-colors"
+            className="text-canvas/60 hover:text-canvas"
           >
             <X size={20} />
           </button>
         </header>
 
-        {/* Form Element */}
-        <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
-          {/* Media Upload Box */}
+        {/* Dynamic Context Error Messages Banner */}
+        {errorMsg && (
+          <div className="p-3 text-xs bg-red-900/40 border border-red-500/30 text-red-200 rounded-lg flex items-center justify-between">
+            <span>⚠️ {errorMsg}</span>
+            <button
+              type="button"
+              onClick={() => setErrorMsg("")}
+              className="text-red-200/60 hover:text-red-200"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Media Upload Area */}
           <div className="space-y-3">
-            <label className="text-xs font-semibold tracking-wider text-canvas/60 uppercase block">
+            <label className="text-xs font-semibold uppercase tracking-wider text-canvas/60 block">
               Vehicle Imagery ({imagePreviews.length} selected)
             </label>
-
-            {/* Main Upload Dropzone area */}
-            <div className="border border-dashed border-canvas/20 rounded-xl bg-canvas/[0.02] hover:bg-canvas/[0.04] transition-colors duration-200">
+            <div className="border border-dashed border-canvas/20 rounded-xl bg-canvas/[0.02] hover:bg-canvas/[0.04]">
               <label
-                htmlFor="modal-image-upload"
+                htmlFor="ctx-file-upload"
                 className="flex flex-col items-center justify-center p-6 cursor-pointer gap-2"
               >
-                <div className="p-2.5 bg-canvas/10 rounded-full border border-canvas/10 text-canvas">
-                  <Upload size={18} />
-                </div>
-                <div className="text-center">
-                  <span className="text-xs font-medium block">
-                    Click to upload vehicle photos
-                  </span>
-                  <span className="text-[10px] text-canvas/40 block mt-0.5">
-                    Select one or multiple high res PNG or JPG files
-                  </span>
-                </div>
+                <Upload size={18} />
+                <span className="text-xs font-medium">
+                  Click to select photos
+                </span>
                 <input
-                  id="modal-image-upload"
+                  id="ctx-file-upload"
                   type="file"
                   accept="image/*"
-                  multiple // <-- Critical attribute added here to allow multi-select
+                  multiple
                   className="hidden"
                   onChange={handleImageChange}
                 />
               </label>
             </div>
 
-            {/* Dynamic Multi-Image Gallery Grid Layout */}
             {imagePreviews.length > 0 && (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 p-2 rounded-xl bg-black/20 border border-canvas/5">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-2 bg-black/20 rounded-xl border border-canvas/5">
                 {imagePreviews.map((preview, index) => (
                   <div
                     key={index}
-                    className="relative aspect-video rounded-lg overflow-hidden border border-canvas/10 bg-black/40 group"
+                    className="relative aspect-video rounded-lg overflow-hidden border border-canvas/10 group"
                   >
                     <img
                       src={preview}
-                      alt={`Vehicle Preview ${index + 1}`}
+                      alt="Upload preview grid"
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                       <button
                         type="button"
                         onClick={() => removeImage(index)}
-                        className="p-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors shadow-lg"
-                        title="Remove Image"
+                        className="p-1 bg-red-600 rounded-full text-white"
                       >
                         <X size={14} />
                       </button>
                     </div>
-                    {index === 0 && (
-                      <span className="absolute bottom-1.5 left-1.5 bg-canvas text-ink text-[9px] font-bold px-1.5 py-0.5 rounded tracking-wider uppercase">
-                        Cover
-                      </span>
-                    )}
                   </div>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Core Info Grid */}
+          {/* Model Metrics Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col gap-1">
               <label
                 htmlFor="brand"
-                className="text-[10px] font-semibold tracking-wider text-canvas/60 uppercase"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
               >
-                Brand / Manufacturer
+                Brand
               </label>
               <input
                 id="brand"
                 type="text"
                 placeholder="Porsche"
-                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 focus:border-signal outline-none rounded-lg text-sm transition"
+                value={formData.brand}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 rounded-lg text-sm outline-none"
                 required
               />
             </div>
             <div className="flex flex-col gap-1">
               <label
                 htmlFor="model"
-                className="text-[10px] font-semibold tracking-wider text-canvas/60 uppercase"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
               >
                 Model
               </label>
               <input
                 id="model"
                 type="text"
-                placeholder="911 GT3"
-                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 focus:border-signal outline-none rounded-lg text-sm transition"
+                placeholder="Cayman GT4"
+                value={formData.model}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 rounded-lg text-sm outline-none"
                 required
               />
             </div>
             <div className="flex flex-col gap-1">
               <label
-                htmlFor="year"
-                className="text-[10px] font-semibold tracking-wider text-canvas/60 uppercase"
+                htmlFor="status"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
               >
-                Production Year
+                Status
               </label>
-              <input
-                id="year"
-                type="number"
-                placeholder="2026"
-                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 focus:border-signal outline-none rounded-lg text-sm transition"
-                required
-              />
+              <select
+                id="status"
+                value={formData.status}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-ink border border-canvas/10 rounded-lg text-sm outline-none"
+              >
+                <option value="available">Available</option>
+                <option value="maintenance">Maintenance</option>
+              </select>
             </div>
           </div>
 
-          {/* Specifications Grid */}
+          {/* Classification Options */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col gap-1">
               <label
                 htmlFor="category"
-                className="text-[10px] font-semibold tracking-wider text-canvas/60 uppercase"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
               >
                 Category
               </label>
               <select
                 id="category"
-                className="px-4 py-2.5 bg-ink border border-canvas/10 focus:border-signal outline-none rounded-lg text-sm transition"
+                value={formData.category}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-ink border border-canvas/10 rounded-lg text-sm outline-none"
               >
-                <option value="luxury">Luxury Sedan</option>
-                <option value="suv">Premium SUV</option>
-                <option value="exotic">Exotic / Sports</option>
+                <option value="Exotic / Sports">Exotic / Sports</option>
+                <option value="Premium SUV">Premium SUV</option>
               </select>
             </div>
             <div className="flex flex-col gap-1">
               <label
                 htmlFor="transmission"
-                className="text-[10px] font-semibold tracking-wider text-canvas/60 uppercase"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
               >
                 Transmission
               </label>
               <select
                 id="transmission"
-                className="px-4 py-2.5 bg-ink border border-canvas/10 focus:border-signal outline-none rounded-lg text-sm transition"
+                value={formData.transmission}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-ink border border-canvas/10 rounded-lg text-sm outline-none"
               >
-                <option value="automatic">Automatic</option>
-                <option value="manual">Manual</option>
+                <option value="Automatic">Automatic</option>
+                <option value="Manual">Manual</option>
               </select>
             </div>
             <div className="flex flex-col gap-1">
               <label
-                htmlFor="fuel"
-                className="text-[10px] font-semibold tracking-wider text-canvas/60 uppercase"
+                htmlFor="fuelType"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
               >
-                Fuel/Power Station
+                Power Train
               </label>
               <select
-                id="fuel"
-                className="px-4 py-2.5 bg-ink border border-canvas/10 focus:border-signal outline-none rounded-lg text-sm transition"
+                id="fuelType"
+                value={formData.fuelType}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-ink border border-canvas/10 rounded-lg text-sm outline-none"
               >
-                <option value="electric">Electric (BEV)</option>
-                <option value="petrol">Premium Gasoline</option>
+                <option value="Premium Gasoline">Premium Gasoline</option>
+                <option value="Electric (BEV)">Electric (BEV)</option>
               </select>
             </div>
           </div>
 
-          {/* Pricing & Logistics Grid */}
+          {/* Engine Power Matrices */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="flex flex-col gap-1">
               <label
-                htmlFor="seats"
-                className="text-[10px] font-semibold tracking-wider text-canvas/60 uppercase"
+                htmlFor="horsepower"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
               >
-                Seating Capacity
+                Horsepower
               </label>
               <input
-                id="seats"
+                id="horsepower"
                 type="number"
-                placeholder="2"
-                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 focus:border-signal outline-none rounded-lg text-sm transition"
+                placeholder="414"
+                value={formData.horsepower}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 rounded-lg text-sm outline-none"
                 required
               />
             </div>
             <div className="flex flex-col gap-1">
               <label
+                htmlFor="acceleration"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
+              >
+                0-60 mph
+              </label>
+              <input
+                id="acceleration"
+                type="text"
+                placeholder="3.7s"
+                value={formData.acceleration}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 rounded-lg text-sm outline-none"
+                required
+              />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor="seats"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
+              >
+                Seats
+              </label>
+              <input
+                id="seats"
+                type="number"
+                value={formData.seats}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 rounded-lg text-sm outline-none"
+                required
+              />
+            </div>
+          </div>
+
+          {/* Logistic Values Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1">
+              <label
                 htmlFor="location"
-                className="text-[10px] font-semibold tracking-wider text-canvas/60 uppercase"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
               >
                 Hub Location
               </label>
               <input
                 id="location"
                 type="text"
-                placeholder="LAX Terminal"
-                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 focus:border-signal outline-none rounded-lg text-sm transition"
+                placeholder="Miami Center"
+                value={formData.location}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 rounded-lg text-sm outline-none"
                 required
               />
             </div>
             <div className="flex flex-col gap-1">
               <label
-                htmlFor="price"
-                className="text-[10px] font-semibold tracking-wider text-canvas/60 uppercase"
+                htmlFor="pricePerDay"
+                className="text-[10px] font-semibold text-canvas/60 uppercase"
               >
-                Daily Rate ($ USD)
+                Daily Price ($)
               </label>
               <input
-                id="price"
+                id="pricePerDay"
                 type="number"
-                placeholder="255"
-                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 focus:border-signal outline-none rounded-lg text-sm transition"
+                placeholder="249"
+                value={formData.pricePerDay}
+                onChange={handleInputChange}
+                className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 rounded-lg text-sm outline-none"
                 required
               />
             </div>
           </div>
 
-          {/* Description Block */}
           <div className="flex flex-col gap-1">
             <label
               htmlFor="description"
-              className="text-[10px] font-semibold tracking-wider text-canvas/60 uppercase"
+              className="text-[10px] font-semibold text-canvas/60 uppercase"
             >
-              Asset Description
+              Description
             </label>
             <textarea
               id="description"
-              rows={3}
-              placeholder="Outline high-end options, tracking telemetry packages..."
-              className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 focus:border-signal outline-none rounded-lg text-sm transition resize-none"
+              rows={2}
+              placeholder="Performance metrics details..."
+              value={formData.description}
+              onChange={handleInputChange}
+              className="px-4 py-2.5 bg-canvas/5 border border-canvas/10 rounded-lg text-sm outline-none resize-none"
               required
             />
           </div>
 
-          {/* Submit Actions Button block */}
+          {/* Actions Footer */}
           <div className="flex justify-end gap-3 pt-4 border-t border-canvas/5">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-lg text-xs font-semibold tracking-wide uppercase hover:bg-canvas/5 transition"
+              disabled={loading}
+              className="px-5 py-2.5 text-xs font-semibold uppercase hover:bg-canvas/5 rounded-lg disabled:opacity-40"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-5 py-2.5 bg-canvas text-ink hover:bg-canvas/90 rounded-lg text-xs font-semibold tracking-wider uppercase flex items-center gap-1.5 transition-all duration-300 active:scale-95 shadow-md"
+              disabled={loading}
+              className="px-5 py-2.5 bg-canvas text-ink rounded-lg text-xs font-semibold uppercase flex items-center gap-1.5 transition active:scale-95 disabled:opacity-50"
             >
-              Deploy Asset
-              <ArrowRight size={14} />
+              {loading ? "Deploying..." : "Deploy Asset"}
+              {!loading && <ArrowRight size={14} />}
             </button>
           </div>
         </form>

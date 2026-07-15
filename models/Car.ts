@@ -40,13 +40,7 @@ const CarSchema = new Schema<ICar>(
     },
     fuelType: {
       type: String,
-      enum: [
-        "Electric (BEV)",
-        "Premium Gasoline",
-        "petrol",
-        "diesel",
-        "hybrid",
-      ], // Accommodates both standards
+      enum: ["Premium Gasoline", "Electric (BEV)", "Hybrid", "Diesel"], // Accommodates both standards
       required: true,
     },
     seats: {
