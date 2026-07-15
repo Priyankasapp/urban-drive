@@ -2,57 +2,55 @@ import React from "react";
 
 const Counter = () => {
   return (
-    <section className="py-32 bg-[#000000] text-white overflow-hidden relative">
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
-        <div className="absolute inset-0 opacity-20 pointer-events-none"></div>
-        <div className="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop relative z-10">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-16">
-            <div className="max-w-xl">
-              <h3 className="font-display-lg text-4xl md:text-5xl mb-6">
-                A Global Network of Performance.
-              </h3>
-              <p className="text-on-primary-container text-body-lg mb-8">
-                Operating in 12 major financial hubs across three continents,
-                providing consistency for the global professional.
-              </p>
-              <div className="flex gap-4">
-                <button className="bg-white text-black px-8 py-3 rounded-brand font-label-sm text-label-sm uppercase tracking-widest hover:bg-zinc-200 transition-colors">
-                  Explore Locations
-                </button>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-12 text-center">
-              <div>
-                <div className="text-6xl font-black mb-2 counter">12</div>
-                <p className="font-label-sm text-label-sm text-on-primary-container tracking-widest uppercase">
-                  Major Cities
-                </p>
-              </div>
-              <div>
-                <div>
-                  <div className="text-6xl font-black mb-2 counter">150</div>
-                  <p className="font-label-sm text-label-sm text-on-primary-container tracking-widest uppercase">
-                    Premium Cars
-                  </p>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <div className="text-6xl font-black mb-2 counter">24</div>
-                  <p className="font-label-sm text-label-sm text-on-primary-container tracking-widest uppercase">
-                    Hour Support
-                  </p>
-                </div>
-              </div>
-              <div>
-                <div>
-                  <div className="text-6xl font-black mb-2 counter">98</div>
-                  <p className="font-label-sm text-label-sm text-on-primary-container tracking-widest uppercase">
-                    % Satisfaction
-                  </p>
-                </div>
-              </div>
-            </div>
+    <section className="relative overflow-hidden bg-black py-24 text-white">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_left,#ffffff_1px,transparent_1px)] [background-size:32px_32px]" />
+
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col items-center justify-between gap-16 px-6 lg:flex-row lg:px-8">
+        {/* Left Content */}
+        <div className="max-w-xl">
+          <h2 className="text-4xl font-bold leading-tight md:text-5xl">
+            A Global Network of Performance.
+          </h2>
+
+          <p className="mt-6 text-lg leading-8 text-gray-300">
+            Operating in 12 major financial hubs across three continents,
+            providing consistency for the global professional.
+          </p>
+
+          <button className="mt-8 rounded-full bg-white px-8 py-3 text-sm font-semibold uppercase tracking-widest text-black transition hover:bg-gray-200">
+            Explore Locations
+          </button>
+        </div>
+
+        {/* Right Counters */}
+        <div className="grid grid-cols-2 gap-10 text-center sm:gap-14">
+          <div>
+            <h3 className="text-5xl font-extrabold md:text-6xl">12</h3>
+            <p className="mt-3 text-sm uppercase tracking-[0.25em] text-gray-400">
+              Major Cities
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-5xl font-extrabold md:text-6xl">150</h3>
+            <p className="mt-3 text-sm uppercase tracking-[0.25em] text-gray-400">
+              Premium Cars
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-5xl font-extrabold md:text-6xl">24</h3>
+            <p className="mt-3 text-sm uppercase tracking-[0.25em] text-gray-400">
+              Hour Support
+            </p>
+          </div>
+
+          <div>
+            <h3 className="text-5xl font-extrabold md:text-6xl">98%</h3>
+            <p className="mt-3 text-sm uppercase tracking-[0.25em] text-gray-400">
+              Satisfaction
+            </p>
           </div>
         </div>
       </div>

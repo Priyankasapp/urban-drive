@@ -5,6 +5,7 @@ import Collections from "@/components/Collections";
 import FeaturedFleet from "@/components/FeaturedFleet";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Counter from "@/components/Counter";
+import Footer from "@/components/Footer";
 
 const page = () => {
   return (
@@ -15,6 +16,7 @@ const page = () => {
       <FeaturedFleet />
       <WhyChooseUs />
       <Counter />
+      <Footer />
     </div>
   );
 };

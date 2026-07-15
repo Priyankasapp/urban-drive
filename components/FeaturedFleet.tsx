@@ -3,8 +3,10 @@
 import React from "react";
 import { CarCard } from "./CarCard";
 import { Car } from "@/types/types";
+
 import Car1 from "@/assets/car1.jpeg";
-import CAr2 from "@/assets/car1.jpg";
+import Car2 from "@/assets/car1.jpg";
+
 const fleetData: Car[] = [
   {
     id: "porsche-taycan",
@@ -22,7 +24,7 @@ const fleetData: Car[] = [
   {
     id: "range-rover",
     category: "Luxury SUV",
-    imageSrc: CAr2.src,
+    imageSrc: Car2.src,
     name: "Range Rover Autobiography",
     tagline: "Unmatched Comfort",
     pricePerDay: 350,
@@ -34,22 +36,30 @@ const fleetData: Car[] = [
   },
 ];
 
-export default function FeaturedFleet(): React.JSX.Element {
+export default function FeaturedFleet() {
   return (
-    <section id="fleet" className="bg-surface py-32 overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-margin-mobile md:px-margin-desktop">
-        {/* Section Heading */}
-        <div className="mb-16">
-          <h3 className="font-headline-lg text-headline-lg text-primary mb-2">
+    <section id="fleet" className="overflow-hidden bg-white py-24 lg:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Heading */}
+        <div className="mb-16 max-w-2xl">
+          <span className="mb-3 inline-block text-sm font-semibold uppercase tracking-[0.3em] text-gray-500">
             Featured Fleet
-          </h3>
-          <p className="font-body-md text-body-md text-text-secondary">
-            Precision performance meet executive luxury.
+          </span>
+
+          <h2 className="text-4xl font-bold tracking-tight text-black md:text-5xl">
+            Precision Performance.
+            <br />
+            Executive Luxury.
+          </h2>
+
+          <p className="mt-6 text-lg leading-8 text-gray-600">
+            Explore our curated collection of world-class luxury vehicles,
+            engineered for performance and crafted for comfort.
           </p>
         </div>
 
-        {/* Fleet Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        {/* Cars */}
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
           {fleetData.map((car) => (
             <CarCard key={car.id} car={car} />
           ))}
