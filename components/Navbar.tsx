@@ -29,16 +29,16 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
-    { name: "Cars", href: "#cars" },
+    { name: "Cars", href: "/cars" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];
 
   return (
-    <nav className="glassmorphism fixed top-0 left-0 right-0 z-50 h-20 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+    <nav className="glassmorphism fixed top-0 left-0 right-0 z-50 h-15 transition-all duration-300">
+      <div className="max-w-7xl px-30 mx-auto px-6 h-full flex items-center justify-between">
         {/* Brand Logo */}
-        <div className="text-xl font-black tracking-widest uppercase text-[var(--text-primary)]">
+        <div className="text-sm font-black tracking-widest text-[var(--text-primary)]">
           Urban<span className="text-[var(--outline)]">Drive.</span>
         </div>
 
@@ -48,7 +48,7 @@ export default function Navbar() {
             <a
               key={link.name}
               href={link.href}
-              className="text-sm font-medium tracking-wide text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"
+              className="text-xs font-medium tracking-wide text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors duration-200"
             >
               {link.name}
             </a>
@@ -58,7 +58,7 @@ export default function Navbar() {
         {/* Action Controls */}
         <div className="hidden md:flex items-center space-x-4">
           {/* Theme Toggle Button */}
-          <button
+          {/* <button
             onClick={toggleDarkMode}
             className="p-2.5 rounded-full border border-[var(--border)] hover:bg-[var(--surface-container)] text-[var(--text-primary)] transition-all duration-200 animate-none"
             aria-label="Toggle Theme"
@@ -92,12 +92,12 @@ export default function Navbar() {
                 />
               </svg>
             )}
-          </button>
+          </button> */}
 
           {/* Core Call to Action Button */}
           <a
             href="#booking"
-            className="px-6 py-2.5 rounded-lg text-sm font-semibold uppercase tracking-wider bg-[var(--primary)] text-[var(--on-primary)] hover:opacity-90 transition-opacity duration-200"
+            className="px-6 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider bg-[var(--primary)] text-[var(--on-primary)] hover:opacity-90 transition-opacity duration-200"
           >
             Booking
           </a>

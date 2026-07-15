@@ -42,14 +42,14 @@ export default function Hero(): React.JSX.Element {
       </div>
 
       {/* Hero Content Container */}
-      <div className="relative z-10 max-w-7xl mx-auto w-full px-6 flex flex-col justify-center h-full pt-20">
+      <div className="relative px-20 z-10 max-w-7xl mx-auto w-full px-6 flex flex-col justify-center h-full pt-20">
         {/* Typography Block */}
         <div className="max-w-2xl text-left mb-10 select-none">
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-[1.1] text-white">
+          <h1 className="text-5xl md:text-5xl font-black tracking-tight leading-[1.1] text-white">
             Elite Drive. <br />
             <span className="opacity-90">Urban Soul.</span>
           </h1>
-          <p className="mt-6 text-base md:text-lg font-normal tracking-wide text-gray-200 max-w-lg leading-relaxed">
+          <p className="mt-6 text-base md:text-sm font-normal tracking-wide text-gray-300 max-w-lg leading-relaxed">
             Experience the pinnacle of automotive engineering with our curated
             fleet of ultra-luxury vehicles. Designed for those who demand
             precision and prestige.
@@ -61,7 +61,7 @@ export default function Hero(): React.JSX.Element {
           {/* Pickup Location Selection */}
           <div className="w-full md:w-1/2 flex items-center px-4 py-2 md:py-0">
             <svg
-              className="w-5 h-5 mr-3 text-gray-300 flex-shrink-0"
+              className="w-5 h-5 mr-3 text-gray-600 flex-shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -80,7 +80,7 @@ export default function Hero(): React.JSX.Element {
               />
             </svg>
             <div className="flex flex-col w-full">
-              <label className="text-xs font-bold uppercase tracking-wider text-gray-300">
+              <label className="text-xs font-bold uppercase tracking-wider text-gray-600">
                 Pickup Location
               </label>
               <input
@@ -88,7 +88,7 @@ export default function Hero(): React.JSX.Element {
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 placeholder="Where are you heading?"
-                className="w-full bg-transparent text-sm font-medium focus:outline-none text-white placeholder-gray-400 mt-0.5"
+                className="w-full bg-transparent text-sm font-medium focus:outline-none text-gray-600 placeholder-gray-400 mt-0.5"
               />
             </div>
           </div>
@@ -96,7 +96,7 @@ export default function Hero(): React.JSX.Element {
           {/* Dates Selection */}
           <div className="w-full md:w-1/2 flex items-center px-4 py-3 md:py-0">
             <svg
-              className="w-5 h-5 mr-3 text-gray-300 flex-shrink-0"
+              className="w-5 h-5 mr-3 text-gray-600 flex-shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -109,7 +109,7 @@ export default function Hero(): React.JSX.Element {
               />
             </svg>
             <div className="flex flex-col w-full">
-              <label className="text-xs font-bold uppercase tracking-wider text-gray-300">
+              <label className="text-xs font-bold uppercase tracking-wider text-gray-600">
                 Dates
               </label>
               <input
@@ -119,7 +119,7 @@ export default function Hero(): React.JSX.Element {
                 placeholder="Select dates"
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                className="w-full bg-transparent text-sm font-medium focus:outline-none text-white placeholder-gray-400 mt-0.5"
+                className="w-full bg-transparent text-sm font-medium focus:outline-none text-gray-600 placeholder-gray-400 mt-0.5"
               />
             </div>
           </div>
