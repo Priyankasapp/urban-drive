@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { Car } from "@/types/cars";
 
@@ -9,8 +10,10 @@ interface CarCardProps {
 
 export function CarCard({ car }: CarCardProps) {
   return (
-    <div className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl">
-      {/* Image */}
+    <Link
+      href={`/reservation/${car.slug || car.id}`}
+      className="group flex flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
+    >
       <div className="relative h-64 overflow-hidden md:h-72">
         <Image
           src={car.image}
@@ -25,18 +28,15 @@ export function CarCard({ car }: CarCardProps) {
         </span>
       </div>
 
-      {/* Content */}
       <div className="flex flex-1 flex-col p-6">
         <div className="mb-6 flex items-start justify-between gap-4">
           <div>
             <h3 className="text-xl font-bold text-gray-900">{car.name}</h3>
-
             <p className="mt-1 text-sm text-gray-500">{car.brand}</p>
           </div>
 
           <div className="text-right">
             <h4 className="text-2xl font-bold text-black">${car.dailyPrice}</h4>
-
             <p className="text-xs uppercase tracking-widest text-gray-500">
               / Day
             </p>
@@ -49,7 +49,6 @@ export function CarCard({ car }: CarCardProps) {
               <p className="text-[11px] uppercase tracking-widest text-gray-500">
                 {spec.label}
               </p>
-
               <p className="mt-1 text-sm font-semibold text-gray-900">
                 {spec.value}
               </p>
@@ -57,6 +56,6 @@ export function CarCard({ car }: CarCardProps) {
           ))}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -1,5 +1,5 @@
 import CarsCTA from "@/components/cars/CarsCTA";
-import CarsFilters from "@/components/cars/CarsFilters";
+// import CarsFilters from "@/components/cars/CarsFilters";
 import CarsGrid from "@/components/cars/CarsGrid";
 import CarsHero from "@/components/cars/CarsHero";
 import Footer from "@/components/Footer";
@@ -11,7 +11,7 @@ const page = () => {
     <>
       <Navbar />
       <CarsHero />
-      <CarsFilters />
+      {/* <CarsFilters /> */}
       <CarsGrid />
       <CarsCTA />
       <Footer />
