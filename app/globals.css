@@ -2,82 +2,100 @@
 
 @layer base {
   :root {
-    /* --- LIGHT MODE --- */
-    /* Surface Colors */
-    --surface: #f8f8f8;
-    --surface-dim: #dadada;
-    --surface-bright: #f9f9f9;
+    /* --- LIGHT MODE (Premium Mobility) --- */
+    /* Surface Colors - Kept soft and clean */
+    --surface: #f8fafc; /* Slighly cooler gray backdrop */
+    --surface-dim: #e2e8f0;
+    --surface-bright: #ffffff;
     --surface-container-lowest: #ffffff;
-    --surface-container-low: #f3f3f3;
-    --surface-container: #eeeeee;
-    --surface-container-high: #e8e8e8;
-    --surface-container-highest: #e2e2e2;
-    --on-surface: #1b1b1b;
-    --on-surface-variant: #4c4546;
-    --inverse-surface: #303030;
-    --inverse-on-surface: #f1f1f1;
-    --outline: #7e7576;
-    --outline-variant: #cfc4c5;
-    --surface-tint: #5e5e5e;
+    --surface-container-low: #f1f5f9;
+    --surface-container: #e2e8f0;
+    --surface-container-high: #cbd5e1;
+    --surface-container-highest: #94a3b8;
+    --on-surface: #0f172a; /* Slate 900 */
+    --on-surface-variant: #475569;
+    --inverse-surface: #1e293b;
+    --inverse-on-surface: #f8fafc;
+    --outline: #94a3b8;
+    --outline-variant: #e2e8f0;
 
-    /* Core Palette */
-    --primary: #000000;
+    /* Core Palette - Injected Electric Blue & Automotive Accents */
+    --primary: #2563eb; /* Active Brand Electric Blue */
     --on-primary: #ffffff;
-    --primary-container: #1b1b1b;
-    --on-primary-container: #848484;
-    --inverse-primary: #c6c6c6;
+    --primary-container: #dbeafe; /* Light blue accent background */
+    --on-primary-container: #1e40af;
+    --inverse-primary: #60a5fa;
 
-    --secondary: #5d5f5f;
+    /* Secondary / Semantic Badges for Fleets */
+    --secondary: #475569;
     --on-secondary: #ffffff;
-    --secondary-container: #dfe0e0;
-    --on-secondary-container: #616363;
+    --secondary-container: #f1f5f9;
+    --on-secondary-container: #334155;
+
+    /* Semantic Status Indicators for Rentals */
+    --status-available: #10b981; /* Emerald Green */
+    --status-available-bg: #d1fae5;
+    --status-rented: #3b82f6; /* Cobalt Blue */
+    --status-rented-bg: #eff6ff;
+    --status-maintenance: #f59e0b; /* Amber Orange */
+    --status-maintenance-bg: #fef3c7;
 
     /* Layout & Base Styling */
-    --background: #ffffff;
-    --border: #e5e5e5;
-    --text-primary: #111111;
-    --text-secondary: #666666;
+    --background: #f8fafc; /* Softer canvas */
+    --border: #e2e8f0;
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
 
     /* Shadows & Blurs */
-    --executive-shadow: 0px 10px 40px rgba(0, 0, 0, 0.04);
-    --glass-fill: rgba(255, 255, 255, 0.7);
+    --executive-shadow:
+      0px 4px 20px -2px rgba(15, 23, 42, 0.04),
+      0px 10px 40px -4px rgba(15, 23, 42, 0.04);
+    --glass-fill: rgba(255, 255, 255, 0.75);
   }
 
   .dark {
-    /* --- DARK MODE (Premium Slate/Onyx) --- */
-    --surface: #121212;
-    --surface-dim: #0a0a0a;
-    --surface-bright: #1a1a1a;
-    --surface-container-lowest: #0d0d0d;
-    --surface-container-low: #161616;
-    --surface-container: #1e1e1e;
-    --surface-container-high: #252525;
-    --surface-container-highest: #2d2d2d;
-    --on-surface: #f3f3f3;
-    --on-surface-variant: #c4babc;
-    --inverse-surface: #f5f5f5;
-    --inverse-on-surface: #111111;
-    --outline: #988e90;
-    --outline-variant: #4d4445;
+    /* --- DARK MODE (Premium Onyx & Cyber Blue) --- */
+    --surface: #0b0f19; /* High-end dark navy slate */
+    --surface-dim: #070a12;
+    --surface-bright: #111827;
+    --surface-container-lowest: #1f2937;
+    --surface-container-low: #111827;
+    --surface-container: #1f2937;
+    --surface-container-high: #374151;
+    --surface-container-highest: #4b5563;
+    --on-surface: #f9fafb;
+    --on-surface-variant: #9ca3af;
+    --inverse-surface: #f3f4f6;
+    --inverse-on-surface: #0b0f19;
+    --outline: #4b5563;
+    --outline-variant: #374151;
 
-    --primary: #ffffff;
-    --on-primary: #000000;
-    --primary-container: #f3f3f3;
-    --on-primary-container: #7a7a7a;
-    --inverse-primary: #3a3a3a;
+    --primary: #3b82f6; /* Glowing primary cyber blue */
+    --on-primary: #ffffff;
+    --primary-container: #1e3a8a;
+    --on-primary-container: #bfdbfe;
+    --inverse-primary: #2563eb;
 
-    --secondary: #a0a2a2;
-    --on-secondary: #000000;
-    --secondary-container: #2d2f2f;
-    --on-secondary-container: #a3a5a5;
+    --secondary: #9ca3af;
+    --on-secondary: #0b0f19;
+    --secondary-container: #374151;
+    --on-secondary-container: #d1d5db;
 
-    --background: #080808;
-    --border: #222222;
-    --text-primary: #f5f5f5;
-    --text-secondary: #999999;
+    /* Dark Mode Status Badges */
+    --status-available: #34d399;
+    --status-available-bg: rgba(52, 211, 153, 0.15);
+    --status-rented: #60a5fa;
+    --status-rented-bg: rgba(96, 165, 250, 0.15);
+    --status-maintenance: #fbbf24;
+    --status-maintenance-bg: rgba(251, 191, 36, 0.15);
 
-    --executive-shadow: 0px 10px 40px rgba(0, 0, 0, 0.5);
-    --glass-fill: rgba(8, 8, 8, 0.7);
+    --background: #030712;
+    --border: #1f2937;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+
+    --executive-shadow: 0px 10px 40px rgba(0, 0, 0, 0.4);
+    --glass-fill: rgba(3, 7, 18, 0.7);
   }
 }
 
@@ -88,6 +106,7 @@ body {
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
 }
 
 .glassmorphism {
@@ -98,13 +117,33 @@ body {
 }
 
 .executive-card {
-  background-color: var(--surface-container-lowest);
+  background-color: var(--surface-bright);
   border: 1px solid var(--border);
   box-shadow: var(--executive-shadow);
-  border-radius: 1rem;
-  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 0.75rem; /* Slightly tighter, modern rounding */
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .executive-card {
+  background-color: var(--surface-dim);
 }
 
 .executive-card:hover {
   transform: translateY(-2px);
+  box-shadow: 0px 12px 30px -4px rgba(15, 23, 42, 0.08);
+  border-color: var(--outline-variant);
+}
+
+/* Custom Status Pill utilities for your Fleet application */
+.badge-available {
+  color: var(--status-available);
+  background-color: var(--status-available-bg);
+}
+.badge-rented {
+  color: var(--status-rented);
+  background-color: var(--status-rented-bg);
+}
+.badge-maintenance {
+  color: var(--status-maintenance);
+  background-color: var(--status-maintenance-bg);
 }
