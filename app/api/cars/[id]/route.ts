@@ -1,40 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { Types } from "mongoose";
+import fs from "fs";
+import path from "path";
 import { connectDB } from "@/lib/db";
 import Car from "@/models/Car";
-import Brand from "@/models/Brand";
-import Category from "@/models/Category";
-import Location from "@/models/Location";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  try {
-    await connectDB();
-    const { id } = await params;
-
-    const car = await Car.findOne({ _id: id, isDeleted: false })
-      .populate("brand")
-      .populate("category")
-      .populate("location");
-
-    if (!car) {
-      return NextResponse.json(
-        { success: false, message: "Car not found" },
-        { status: 404 },
-      );
-    }
-
-    return NextResponse.json({ success: true, car });
-  } catch (error) {
-    console.error("GET Car Detail Error:", error);
-    return NextResponse.json(
-      { success: false, message: "Internal Server Error" },
-      { status: 500 },
-    );
-  }
-}
-
+// ==========================================
+// 1. UPDATE VEHICLE (PUT /api/cars/[id])
+// ==========================================
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -42,60 +15,32 @@ export async function PUT(
   try {
     await connectDB();
     const { id } = await params;
-    const data = await request.json();
 
-    let brandId = data.brand;
-    let categoryId = data.category;
-    let locationId = data.location;
-
-    // Lookup brand if passed as a name
-    if (typeof brandId === "string" && brandId.length !== 24) {
-      let b = await Brand.findOne({ name: { $regex: `^${brandId}$`, $options: "i" } });
-      if (!b) {
-        b = await Brand.create({ name: brandId, logo: "https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=200" });
-      }
-      brandId = b._id;
+    // 1. Keep this check to ensure the string is a valid ID pattern
+    if (!Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid car id" },
+        { status: 400 },
+      );
     }
 
-    // Lookup category if passed as a name
-    if (typeof categoryId === "string" && categoryId.length !== 24) {
-      let c = await Category.findOne({ slug: categoryId.toLowerCase() });
-      if (!c) {
-        c = await Category.findOne({ name: { $regex: `^${categoryId}$`, $options: "i" } });
-      }
-      if (!c) {
-        c = await Category.create({ name: categoryId, slug: categoryId.toLowerCase().replace(/\s+/g, "-") });
-      }
-      categoryId = c._id;
-    }
+    const isMultipartRequest = request.headers
+      .get("content-type")
+      ?.includes("multipart/form-data");
+    const updateData: Record<string, unknown> = isMultipartRequest
+      ? await getMultipartUpdateData(request)
+      : await request.json();
 
-    // Lookup location if passed as a name
-    if (typeof locationId === "string" && locationId.length !== 24) {
-      let l = await Location.findOne({ name: { $regex: `^${locationId}$`, $options: "i" } });
-      if (!l) {
-        l = await Location.create({ name: locationId, address: locationId, city: "Default" });
-      }
-      locationId = l._id;
-    }
+    // Prevent direct manual manipulation of system indexes
+    delete updateData._id;
+    delete updateData.isDeleted;
 
-    const updatedData: any = {
-      name: data.name,
-      pricePerDay: Number(data.pricePerDay),
-      transmission: data.transmission,
-      fuelType: data.fuelType,
-      seats: Number(data.seats),
-      description: data.description,
-      status: data.status,
-    };
-
-    if (brandId) updatedData.brand = brandId;
-    if (categoryId) updatedData.category = categoryId;
-    if (locationId) updatedData.location = locationId;
-    if (data.images) {
-      updatedData.images = Array.isArray(data.images) ? data.images : [data.images];
-    }
-
-    const updatedCar = await Car.findByIdAndUpdate(id, updatedData, { new: true });
+    // Mongoose casts the validated id string to an ObjectId.
+    const updatedCar = await Car.findByIdAndUpdate(
+      id, // <-- Passing the raw string solves the TS2345 type mismatch
+      { $set: updateData },
+      { new: true, runValidators: true },
+    );
 
     if (!updatedCar) {
       return NextResponse.json(
@@ -104,25 +49,93 @@ export async function PUT(
       );
     }
 
-    return NextResponse.json({ success: true, car: updatedCar });
+    return NextResponse.json({
+      success: true,
+      message: "Car updated successfully",
+      data: updatedCar,
+    });
   } catch (error) {
     console.error("PUT Car Error:", error);
     return NextResponse.json(
-      { success: false, message: (error as Error).message },
-      { status: 400 },
+      {
+        success: false,
+        message: (error as Error).message || "Internal Server Error",
+      },
+      { status: 500 },
     );
   }
 }
 
-export async function DELETE(
+async function getMultipartUpdateData(
   request: NextRequest,
+): Promise<Record<string, unknown>> {
+  const formData = await request.formData();
+  const updateData: Record<string, unknown> = {
+    name: formData.get("name"),
+    pricePerDay: Number(formData.get("pricePerDay")),
+    transmission: formData.get("transmission"),
+    fuelType: formData.get("fuelType"),
+    seats: Number(formData.get("seats")),
+    horsepower: Number(formData.get("horsepower")),
+    acceleration: formData.get("acceleration"),
+    description: formData.get("description"),
+    status: formData.get("status"),
+  };
+
+  const files = formData
+    .getAll("images")
+    .filter((entry): entry is File => entry instanceof File && entry.size > 0);
+
+  if (files.length === 0) {
+    return updateData;
+  }
+
+  const uploadDir = path.join(process.cwd(), "public", "uploads");
+  fs.mkdirSync(uploadDir, { recursive: true });
+
+  updateData.images = await Promise.all(
+    files.map(async (file) => {
+      if (!file.type.startsWith("image/")) {
+        throw new Error("Only image files can be uploaded.");
+      }
+
+      const filename = `${Date.now()}-${crypto.randomUUID()}${path.extname(file.name) || ".jpg"}`;
+      await fs.promises.writeFile(
+        path.join(uploadDir, filename),
+        Buffer.from(await file.arrayBuffer()),
+      );
+
+      return `/uploads/${filename}`;
+    }),
+  );
+
+  return updateData;
+}
+
+// ==========================================
+// 2. SOFT DELETE VEHICLE (DELETE /api/cars/[id])
+// ==========================================
+export async function DELETE(
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     await connectDB();
     const { id } = await params;
 
-    const car = await Car.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
+    if (!Types.ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid car id" },
+        { status: 400 },
+      );
+    }
+
+    // Pass the raw 'id' string here as well!
+    const car = await Car.findByIdAndUpdate(
+      id, // <-- Pass raw string directly here too
+      { isDeleted: true },
+      { new: true },
+    );
 
     if (!car) {
       return NextResponse.json(
@@ -131,7 +144,10 @@ export async function DELETE(
       );
     }
 
-    return NextResponse.json({ success: true, message: "Car deleted successfully" });
+    return NextResponse.json({
+      success: true,
+      message: "Car deleted successfully",
+    });
   } catch (error) {
     console.error("DELETE Car Error:", error);
     return NextResponse.json(

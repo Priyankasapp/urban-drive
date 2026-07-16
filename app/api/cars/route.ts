@@ -1,9 +1,88 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
-import Car from "@/models/Car";
+import Car, { type ICar } from "@/models/Car";
+import Brand from "@/models/Brand";
+import Category from "@/models/Category";
+import Location from "@/models/Location";
 import { Types } from "mongoose";
 import fs from "fs";
 import path from "path";
+
+const transmissionOptions = [
+  "Automatic",
+  "Manual",
+] as const satisfies readonly ICar["transmission"][];
+const fuelTypeOptions = [
+  "Electric (BEV)",
+  "Premium Gasoline",
+  "petrol",
+  "diesel",
+  "hybrid",
+] as const satisfies readonly ICar["fuelType"][];
+const statusOptions = [
+  "available",
+  "booked",
+  "maintenance",
+  "reserved",
+  "new",
+] as const satisfies readonly ICar["status"][];
+
+function isOption<T extends string>(
+  options: readonly T[],
+  value: string,
+): value is T {
+  return (options as readonly string[]).includes(value);
+}
+
+async function resolveBrand(value: string) {
+  if (Types.ObjectId.isValid(value)) {
+    const brand = await Brand.findById(value).exec();
+    if (!brand) throw new Error("Selected brand was not found.");
+    return brand._id;
+  }
+
+  const existingBrand = await Brand.findOne({ name: value }).exec();
+  if (existingBrand) return existingBrand._id;
+
+  return (await Brand.create({ name: value, logo: "/assets/car1.jpeg" }))._id;
+}
+
+async function resolveCategory(value: string) {
+  if (Types.ObjectId.isValid(value)) {
+    const category = await Category.findById(value).exec();
+    if (!category) throw new Error("Selected category was not found.");
+    return category._id;
+  }
+
+  const existingCategory = await Category.findOne({ name: value }).exec();
+  if (existingCategory) return existingCategory._id;
+
+  const slug = value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)+/g, "");
+  return (await Category.create({ name: value, slug }))._id;
+}
+
+async function resolveLocation(value: string) {
+  if (Types.ObjectId.isValid(value)) {
+    const location = await Location.findById(value).exec();
+    if (!location) throw new Error("Selected location was not found.");
+    return location._id;
+  }
+
+  const existingLocation = await Location.findOne({ name: value }).exec();
+  if (existingLocation) return existingLocation._id;
+
+  return (
+    await Location.create({
+      name: value,
+      address: value,
+      city: "Not specified",
+    })
+  )._id;
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,18 +96,40 @@ export async function POST(request: NextRequest) {
     const category = formData.get("category") as string;
     const location = formData.get("location") as string;
     const pricePerDay = formData.get("pricePerDay");
-    const transmission = formData.get("transmission") as string;
-    const fuelType = formData.get("fuelType") as string;
+    const transmission = formData.get("transmission");
+    const fuelType = formData.get("fuelType");
     const seats = formData.get("seats");
     const horsepower = formData.get("horsepower");
     const acceleration = formData.get("acceleration") as string;
     const description = formData.get("description") as string;
-    const status = (formData.get("status") as string) || "available";
+    const status = formData.get("status") || "available";
 
     // Basic required input check
-    if (!name || !pricePerDay || !horsepower || !acceleration) {
+    if (
+      !name ||
+      !brand ||
+      !category ||
+      !location ||
+      !pricePerDay ||
+      !horsepower ||
+      !acceleration ||
+      typeof transmission !== "string" ||
+      typeof fuelType !== "string" ||
+      typeof status !== "string"
+    ) {
       return NextResponse.json(
         { success: false, message: "Missing required core fields." },
+        { status: 400 },
+      );
+    }
+
+    if (
+      !isOption(transmissionOptions, transmission) ||
+      !isOption(fuelTypeOptions, fuelType) ||
+      !isOption(statusOptions, status)
+    ) {
+      return NextResponse.json(
+        { success: false, message: "Invalid car specification." },
         { status: 400 },
       );
     }
@@ -77,19 +178,19 @@ export async function POST(request: NextRequest) {
       "-" +
       Date.now().toString().slice(-4);
 
+    const [brandId, categoryId, locationId] = await Promise.all([
+      resolveBrand(brand),
+      resolveCategory(category),
+      resolveLocation(location),
+    ]);
+
     // 5. Construct document validation block inside MongoDB
     const newCar = await Car.create({
       name,
       slug,
-      brand: Types.ObjectId.isValid(brand)
-        ? new Types.ObjectId(brand)
-        : new Types.ObjectId(),
-      category: Types.ObjectId.isValid(category)
-        ? new Types.ObjectId(category)
-        : new Types.ObjectId(),
-      location: Types.ObjectId.isValid(location)
-        ? new Types.ObjectId(location)
-        : new Types.ObjectId(),
+      brand: brandId,
+      category: categoryId,
+      location: locationId,
       pricePerDay: Number(pricePerDay),
       transmission,
       fuelType,
@@ -115,8 +216,8 @@ export async function GET() {
   try {
     await connectDB();
 
-    // Adding .exec() at the end gives TypeScript the standard clean array it expects
-    const cars = await Car.find()
+    // Soft-deleted cars remain in the database but must not be shown in the fleet.
+    const cars = await Car.find({ isDeleted: false })
       .populate("brand")
       .populate("category")
       .populate("location")

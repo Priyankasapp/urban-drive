@@ -1,35 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { type CarData, useCars } from "@/context/CarContext";
 import AddCarModal from "../components/AddCarModal";
-
-// Placeholder data — swapped for a real fetch once /api/cars exists
-const mockCars = [
-  {
-    id: "1",
-    name: "Toyota Camry",
-    brand: "Toyota",
-    category: "Sedan",
-    pricePerDay: 45,
-    status: "available",
-  },
-  {
-    id: "2",
-    name: "Ford Explorer",
-    brand: "Ford",
-    category: "SUV",
-    pricePerDay: 65,
-    status: "booked",
-  },
-  {
-    id: "3",
-    name: "Honda Civic",
-    brand: "Honda",
-    category: "Sedan",
-    pricePerDay: 38,
-    status: "maintenance",
-  },
-];
+import EditCarModal from "../components/EditCarModal";
 
 const statusStyles: Record<string, string> = {
   available: "bg-success/10 text-success border border-success/20",
@@ -40,10 +14,28 @@ const statusStyles: Record<string, string> = {
 export default function AdminCarsPage() {
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingCar, setEditingCar] = useState<CarData | null>(null);
+  const { cars, loading, deletingCarId, errorMsg, setErrorMsg, deleteCar } =
+    useCars();
 
-  const filteredCars = mockCars.filter((car) =>
-    car.name.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filteredCars = useMemo(() => {
+    const query = search.toLowerCase();
+
+    return cars.filter((car) => {
+      const brandName =
+        typeof car.brand === "string" ? car.brand : (car.brand?.name ?? "");
+      const categoryName =
+        typeof car.category === "string"
+          ? car.category
+          : (car.category?.name ?? "");
+
+      return (
+        car.name.toLowerCase().includes(query) ||
+        brandName.toLowerCase().includes(query) ||
+        categoryName.toLowerCase().includes(query)
+      );
+    });
+  }, [cars, search]);
 
   return (
     <div className="space-y-6">
@@ -86,7 +78,15 @@ export default function AdminCarsPage() {
         </div>
 
         {/* Table View Node Layout */}
-        {filteredCars.length === 0 ? (
+        {loading ? (
+          <div className="py-16 text-center text-sm text-ink/40">
+            Loading fleet data...
+          </div>
+        ) : errorMsg ? (
+          <div className="py-16 text-center text-sm text-danger/70">
+            {errorMsg}
+          </div>
+        ) : filteredCars.length === 0 ? (
           <div className="py-16 text-center text-sm text-ink/40">
             No cars match your search — try a different name, or add a new car
             to the fleet.
@@ -117,41 +117,66 @@ export default function AdminCarsPage() {
                 </tr>
               </thead>
               <tbody>
-                {filteredCars.map((car) => (
-                  <tr
-                    key={car.id}
-                    className="border-b border-line/30 last:border-0 hover:bg-canvas/40 transition duration-150"
-                  >
-                    <td className="px-5 py-3.5 text-ink font-medium">
-                      {car.name}
-                    </td>
-                    <td className="px-5 py-3.5 text-ink/70">{car.brand}</td>
-                    <td className="px-5 py-3.5 text-ink/70">{car.category}</td>
-                    <td className="px-5 py-3.5 text-ink/70">
-                      ${car.pricePerDay}
-                    </td>
-                    <td className="px-5 py-3.5">
-                      <span
-                        className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium capitalize inline-block ${statusStyles[car.status]}`}
-                      >
-                        {car.status}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3.5 text-right space-x-3">
-                      <button
-                        onClick={() => {
-                          /* Trigger Edit functionality later */
-                        }}
-                        className="text-ink/50 hover:text-ink text-xs font-medium transition"
-                      >
-                        Edit
-                      </button>
-                      <button className="text-danger/70 hover:text-danger text-xs font-medium transition">
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                {filteredCars.map((car) => {
+                  const brandName =
+                    typeof car.brand === "string"
+                      ? car.brand
+                      : (car.brand?.name ?? "—");
+                  const categoryName =
+                    typeof car.category === "string"
+                      ? car.category
+                      : (car.category?.name ?? "—");
+                  const statusKey = (car.status || "available").toLowerCase();
+
+                  return (
+                    <tr
+                      key={car._id}
+                      className="border-b border-line/30 last:border-0 hover:bg-canvas/40 transition duration-150"
+                    >
+                      <td className="px-5 py-3.5 text-ink font-medium">
+                        {car.name}
+                      </td>
+                      <td className="px-5 py-3.5 text-ink/70">{brandName}</td>
+                      <td className="px-5 py-3.5 text-ink/70">
+                        {categoryName}
+                      </td>
+                      <td className="px-5 py-3.5 text-ink/70">
+                        ${car.pricePerDay}
+                      </td>
+                      <td className="px-5 py-3.5">
+                        <span
+                          className={`px-2.5 py-0.5 rounded-md text-[11px] font-medium capitalize inline-block ${statusStyles[statusKey] ?? statusStyles.available}`}
+                        >
+                          {statusKey}
+                        </span>
+                      </td>
+                      <td className="px-5 py-3.5 text-right space-x-3">
+                        <button
+                          onClick={() => {
+                            setErrorMsg("");
+                            setEditingCar(car);
+                          }}
+                          className="text-ink/50 hover:text-ink text-xs font-medium transition"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (!window.confirm("Delete this car?")) {
+                              return;
+                            }
+
+                            await deleteCar(car._id);
+                          }}
+                          disabled={deletingCarId !== null}
+                          className="text-danger/70 hover:text-danger text-xs font-medium transition disabled:opacity-50"
+                        >
+                          {deletingCarId === car._id ? "Deleting..." : "Delete"}
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -160,6 +185,11 @@ export default function AdminCarsPage() {
 
       {/* ================= ADD CAR MODAL LINK MOUNT ================= */}
       <AddCarModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <EditCarModal
+        key={editingCar?._id ?? "closed"}
+        car={editingCar}
+        onClose={() => setEditingCar(null)}
+      />
     </div>
   );
 }

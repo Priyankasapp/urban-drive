@@ -1,4 +1,4 @@
-import { Schema, models, model } from "mongoose";
+import { Schema, models, model, type Model } from "mongoose";
 
 export interface IBrand {
   name: string;
@@ -17,5 +17,7 @@ const BrandSchema = new Schema<IBrand>(
   { timestamps: true },
 );
 
-const Brand = models.Brand || model<IBrand>("Brand", BrandSchema);
+const Brand: Model<IBrand> =
+  (models.Brand as Model<IBrand> | undefined) ??
+  model<IBrand>("Brand", BrandSchema);
 export default Brand;

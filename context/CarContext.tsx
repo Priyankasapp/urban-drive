@@ -45,13 +45,32 @@ export interface CarData {
   createdAt: string;
 }
 
+export interface CarUpdateData {
+  name: string;
+  pricePerDay: number;
+  transmission: string;
+  fuelType: string;
+  seats: number;
+  horsepower: number;
+  acceleration: string;
+  description: string;
+  status: string;
+}
+
 interface CarContextType {
   cars: CarData[];
   loading: boolean;
+  deletingCarId: string | null;
   errorMsg: string;
   setErrorMsg: (msg: string) => void;
   fetchCars: () => Promise<void>;
   addNewCar: (formData: CarFormData, files: File[]) => Promise<boolean>;
+  updateCar: (
+    carId: string,
+    data: CarUpdateData,
+    files?: File[],
+  ) => Promise<boolean>;
+  deleteCar: (carId: string) => Promise<boolean>;
 }
 
 const CarContext = createContext<CarContextType | undefined>(undefined);
@@ -59,6 +78,7 @@ const CarContext = createContext<CarContextType | undefined>(undefined);
 export function CarProvider({ children }: { children: ReactNode }) {
   const [cars, setCars] = useState<CarData[]>([]);
   const [loading, setLoading] = useState(false);
+  const [deletingCarId, setDeletingCarId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState("");
 
   // 1. Centralized vehicle loading mechanic
@@ -161,9 +181,89 @@ export function CarProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const deleteCar = async (carId: string): Promise<boolean> => {
+    setDeletingCarId(carId);
+    setErrorMsg("");
+
+    try {
+      const response = await fetch(`/api/cars/${carId}`, {
+        method: "DELETE",
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to delete car.");
+      }
+
+      // The API soft-deletes the car; remove it from the visible local fleet.
+      setCars((currentCars) => currentCars.filter((car) => car._id !== carId));
+      return true;
+    } catch (err) {
+      console.error("Context Car Deletion Failure:", err);
+      setErrorMsg(err instanceof Error ? err.message : "Unable to delete car.");
+      return false;
+    } finally {
+      setDeletingCarId(null);
+    }
+  };
+
+  const updateCar = async (
+    carId: string,
+    data: CarUpdateData,
+    files: File[] = [],
+  ): Promise<boolean> => {
+    setLoading(true);
+    setErrorMsg("");
+
+    try {
+      const hasNewImages = files.length > 0;
+      const body = hasNewImages
+        ? (() => {
+            const formData = new FormData();
+            Object.entries(data).forEach(([key, value]) => {
+              formData.append(key, String(value));
+            });
+            files.forEach((file) => formData.append("images", file));
+            return formData;
+          })()
+        : JSON.stringify(data);
+      const response = hasNewImages
+        ? await fetch(`/api/cars/${carId}`, { method: "PUT", body })
+        : await fetch(`/api/cars/${carId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body,
+          });
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Failed to update car.");
+      }
+
+      await fetchCars();
+      return true;
+    } catch (err) {
+      console.error("Context Car Update Failure:", err);
+      setErrorMsg(err instanceof Error ? err.message : "Unable to update car.");
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <CarContext.Provider
-      value={{ cars, loading, errorMsg, setErrorMsg, fetchCars, addNewCar }}
+      value={{
+        cars,
+        loading,
+        deletingCarId,
+        errorMsg,
+        setErrorMsg,
+        fetchCars,
+        addNewCar,
+        updateCar,
+        deleteCar,
+      }}
     >
       {children}
     </CarContext.Provider>

@@ -1,4 +1,4 @@
-import { Schema, models, model } from "mongoose";
+import { Schema, models, model, type Model } from "mongoose";
 
 export interface ILocation {
   name: string;
@@ -19,6 +19,7 @@ const LocationSchema = new Schema<ILocation>(
   { timestamps: true },
 );
 
-const Location =
-  models.Location || model<ILocation>("Location", LocationSchema);
+const Location: Model<ILocation> =
+  (models.Location as Model<ILocation> | undefined) ??
+  model<ILocation>("Location", LocationSchema);
 export default Location;

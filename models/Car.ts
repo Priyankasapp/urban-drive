@@ -1,4 +1,4 @@
-import { Schema, models, model, Types } from "mongoose";
+import { Schema, models, model, Types, type Model } from "mongoose";
 
 export interface ICar {
   name: string;
@@ -79,5 +79,8 @@ const CarSchema = new Schema<ICar>(
 
 // Pre-save validation or automatic slug generation can be placed here if necessary
 
-const Car = models.Car || model<ICar>("Car", CarSchema);
+// `models.Car` is untyped in Mongoose's global model cache. Cast it to the
+// schema's model type so cached and newly-created models expose the same API.
+const Car: Model<ICar> =
+  (models.Car as Model<ICar> | undefined) ?? model<ICar>("Car", CarSchema);
 export default Car;

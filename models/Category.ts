@@ -1,4 +1,4 @@
-import { Schema, models, model } from "mongoose";
+import { Schema, models, model, type Model } from "mongoose";
 
 export interface ICategory {
   name: string;
@@ -17,6 +17,7 @@ const CategorySchema = new Schema<ICategory>(
   { timestamps: true },
 );
 
-const Category =
-  models.Category || model<ICategory>("Category", CategorySchema);
+const Category: Model<ICategory> =
+  (models.Category as Model<ICategory> | undefined) ??
+  model<ICategory>("Category", CategorySchema);
 export default Category;

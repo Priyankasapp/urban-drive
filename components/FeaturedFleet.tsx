@@ -10,7 +10,7 @@ import { Car } from "@/types/cars";
 // Explicitly typing it as Car[] ensures it strictly adheres to your interface
 const fleetData: Car[] = [
   {
-    id: "porsche-taycan",
+    id: "porsche-taycans",
     name: "Porsche Taycan Turbo S",
     slug: "porsche-taycan-turbo-s",
     brand: "Porsche",
@@ -29,7 +29,7 @@ const fleetData: Car[] = [
     ],
   },
   {
-    id: "range-rover",
+    id: "range-rovesr",
     name: "Range Rover Autobiography",
     slug: "range-rover-autobiography",
     brand: "Land Rover",
@@ -47,7 +47,7 @@ const fleetData: Car[] = [
     ],
   },
   {
-    id: "range-rover",
+    id: "range-rosver",
     name: "Range Rover Autobiography",
     slug: "range-rover-autobiography",
     brand: "Land Rover",
