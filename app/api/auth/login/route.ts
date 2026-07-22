@@ -1,3 +1,4 @@
+// app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 
@@ -5,6 +6,20 @@ import { connectDB } from "@/lib/db";
 import { generateToken } from "@/lib/jwt";
 import User from "@/models/User";
 import "@/models/Role"; // Ensure Role schema is registered in Mongoose
+
+//  Define types
+interface Role {
+  name: string;
+}
+
+interface UserDocument {
+  _id: { toString(): string };
+  email: string;
+  password: string;
+  name: string;
+  isActive: boolean;
+  role: Role | string; // Could be populated Role object or string
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,7 +39,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Find user and populate role
-    const user = await User.findOne({ email }).populate("role");
+    const user = (await User.findOne({ email }).populate(
+      "role",
+    )) as UserDocument | null;
 
     if (!user) {
       return NextResponse.json(
@@ -47,9 +64,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Resolve role name
-    const roleObj = user.role as any;
-    const userRole = roleObj?.name || "";
+    // Resolve role name with type safety
+    let userRole = "";
+    if (typeof user.role === "object" && user.role !== null) {
+      const roleObj = user.role as Role;
+      userRole = roleObj.name || "";
+    } else if (typeof user.role === "string") {
+      userRole = user.role;
+    }
 
     // Allow super_admin, admin, and manager to log in
     const allowedRoles = ["super_admin", "admin", "manager"];

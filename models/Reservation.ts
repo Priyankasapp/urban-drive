@@ -97,6 +97,7 @@ ReservationSchema.index({ car: 1, "pickup.date": 1 });
 ReservationSchema.index({ "customer.email": 1 });
 ReservationSchema.index({ reservationRef: 1 });
 
+// ============ MODEL EXPORT ============
 const Reservation =
   models.Reservation || model<IReservation>("Reservation", ReservationSchema);
 export default Reservation;

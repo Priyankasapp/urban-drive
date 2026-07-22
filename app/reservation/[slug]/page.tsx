@@ -2,14 +2,26 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useCars } from "@/context/CarContext";
+import { useBooking } from "@/context/BookingContext";
 
 export default function ReservationPage() {
   const params = useParams();
   const router = useRouter();
   const { cars: apiCars } = useCars();
+
+  // --- Consume Booking Context ---
+  const {
+    setCar,
+    setPickup,
+    setDropoff,
+    setChauffeur: setContextChauffeur,
+    setEnhancements: setContextEnhancements,
+    setCustomer: setContextCustomer,
+    resetBooking,
+  } = useBooking();
 
   // --- Form & Booking States ---
   const [pickupLocation, setPickupLocation] = useState("");
@@ -35,9 +47,32 @@ export default function ReservationPage() {
     return apiCars.find((item) => item.slug === slug) ?? null;
   }, [apiCars, params?.slug]);
 
+  // --- Sync Found Car to Global Booking Context ---
+  useEffect(() => {
+    if (car) {
+      const dailyRate =
+        "pricePerDay" in car
+          ? (car as { pricePerDay: number }).pricePerDay
+          : "dailyPrice" in car
+            ? (car as { dailyPrice: number }).dailyPrice
+            : 0;
+
+      setCar({
+        _id:
+          (car as { _id?: string })._id ||
+          (car as { id?: string }).id ||
+          "unknown",
+        name: car.name,
+        slug: car.slug,
+        pricePerDay: dailyRate,
+        images: car.images || [],
+      });
+    }
+  }, [car, setCar]);
+
   // --- Live Dynamic Math Calculations ---
   const rentalDays = useMemo(() => {
-    if (!pickupDate || !returnDate) return 1; // Default fallback metric
+    if (!pickupDate || !returnDate) return 1;
     const start = new Date(pickupDate);
     const end = new Date(returnDate);
     const timeDiff = end.getTime() - start.getTime();
@@ -48,7 +83,6 @@ export default function ReservationPage() {
   const pricingCalculations = useMemo(() => {
     if (!car) return { baseRate: 0, subtotal: 0, addOns: 0, tax: 0, total: 0 };
 
-    // Fallback safely if context specifies standard daily price parameter mapping
     const dailyRate =
       "pricePerDay" in car
         ? (car as { pricePerDay: number }).pricePerDay
@@ -58,12 +92,12 @@ export default function ReservationPage() {
     const baseRate = dailyRate * rentalDays;
 
     let addOns = 0;
-    if (hasChauffeur) addOns += 100 * rentalDays; // Custom mock rate configuration
+    if (hasChauffeur) addOns += 100 * rentalDays;
     if (hasDelivery) addOns += 150;
     if (hasSatellite) addOns += 45 * rentalDays;
 
     const subtotal = baseRate + addOns;
-    const tax = subtotal * 0.12; // Standard 12% calculation matrix
+    const tax = subtotal * 0.12;
     const total = subtotal + tax;
 
     return { dailyRate, baseRate, addOns, tax, total };
@@ -111,6 +145,22 @@ export default function ReservationPage() {
     setErrorMessage("");
     setSuccessMessage("");
 
+    // 1. Sync all states to Context values prior to sending payloads
+    setContextCustomer({ name: fullName, email, phone });
+    setPickup({
+      location: pickupLocation,
+      date: pickupDate,
+      time: pickupTime || "10:00",
+    });
+    setDropoff({ location: pickupLocation, date: returnDate, time: "10:00" });
+    setContextChauffeur(hasChauffeur);
+    setContextEnhancements({
+      conciergeDelivery: hasDelivery,
+      platinumInsurance: true,
+      satelliteConnectivity: hasSatellite,
+    });
+
+    // 2. Format structure to match API configurations
     const reservationPayload = {
       carId:
         (car as { _id?: string })._id ||
@@ -164,6 +214,10 @@ export default function ReservationPage() {
       setSuccessMessage(
         `Success! Your reservation ${result.reservation.reservationRef} has been confirmed. Check your email for details.`,
       );
+
+      // Clean context state after successful processing
+      resetBooking();
+
       setTimeout(() => {
         router.push("/cars");
       }, 2000);
@@ -277,7 +331,7 @@ export default function ReservationPage() {
               onSubmit={handleConfirmReservation}
               className="space-y-10"
             >
-              {/* NEW SUBSECTION CONTAINER: Guest Stateless Contact Identifiers */}
+              {/* Guest Stateless Contact Identifiers */}
               <div className="space-y-6">
                 <h3 className="border-b border-[#E5E5E5] pb-2 text-[11px] font-semibold uppercase tracking-[0.3em] text-black">
                   Driver Details (Guest Checkout)
